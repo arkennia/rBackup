@@ -32,16 +32,21 @@ void MainWindow::on_browseSrc_clicked()
 
 void MainWindow::on_generateButton_clicked()
 {
+        ui->command->setPlainText(generate());
 }
 
 QString MainWindow::generate() const
 {
-        QString out = selectBackupType();
+        QString tmp = "", out = selectBackupType();
 
         if (ui->transferCompression->isChecked())
                 out += TRANSFER_COMPRESSION;
 
         out += selectDeleteType();
+        out += ui->source->text() + " ";
+        out += ui->destination->text() + " ";
+        out += "\n";
+        out += selectCompressionType();
 
         return out;
 }
@@ -74,21 +79,53 @@ QString MainWindow::selectBackupType() const
 
 QString MainWindow::selectDeleteType() const
 {
-        QString out = "";
-
         switch (ui->deleteWhen->currentIndex()) {
         case 0:
-                out += DELETE_DURING;
-                break;
+                return DELETE_DURING;
         case 1:
-                out += DELETE_AFTER;
-                break;
+                return DELETE_AFTER;
         case 2:
-                out += DELETE_BEFORE;
-                break;
+                return DELETE_BEFORE;
         default:
                 throw std::out_of_range("Invalid Delete Type Index");
         }
+}
 
+QString MainWindow::selectCompressionType() const
+{
+        QString out = "";
+        QString dest = ui->destination->text();
+        switch (ui->backupCompression->currentIndex()) {
+        case 0:
+                break;
+        case 1:
+                out += TAR;
+                out += dest + ".tar " + dest;
+                break;
+        case 2:
+                out += TAR_GZ;
+                out += dest + ".tar.gz " + dest;
+                break;
+        case 3:
+                out += TAR_BZ;
+                out += dest + ".tar.bz2 " + dest;
+                break;
+        case 4:
+                out += TAR_XZ;
+                out += dest + ".tar.xz " + dest;
+                break;
+        default:
+                throw std::out_of_range("Invalid Compression Type Index");
+        }
         return out;
+}
+
+void MainWindow::on_finish_clicked()
+{
+        ui->tabs->setCurrentIndex(0);
+}
+
+void MainWindow::on_newButton_clicked()
+{
+        ui->tabs->setCurrentIndex(1);
 }

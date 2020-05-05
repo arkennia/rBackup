@@ -23,8 +23,9 @@ class MainWindow : public QMainWindow
     private slots:
         void on_browseDest_clicked();
         void on_browseSrc_clicked();
-
         void on_generateButton_clicked();
+
+        void on_finish_clicked();
 
     private:
         Ui::MainWindow *ui;
@@ -32,5 +33,6 @@ class MainWindow : public QMainWindow
         QString generate() const;
         QString selectBackupType() const;
         QString selectDeleteType() const;
+        QString selectCompressionType() const;
 };
 #endif // MAINWINDOW_H

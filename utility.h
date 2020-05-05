@@ -3,19 +3,19 @@
 
 #include <QString>
 
-constexpr char INCREMENTAL_OPTIONS[] = "rsync -auq";
+constexpr char INCREMENTAL_OPTIONS[] = "rsync -auq ";
 
-constexpr char FULL_OPTIONS[] = "rsync -aq";
+constexpr char FULL_OPTIONS[] = "rsync -aq ";
 
-constexpr char NO_DELTA[] = " -W";
+constexpr char NO_DELTA[] = "-W ";
 
-constexpr char TRANSFER_COMPRESSION[] = " -z";
+constexpr char TRANSFER_COMPRESSION[] = "-z ";
 
-constexpr char DELETE_DURING[] = " --delete-during";
+constexpr char DELETE_DURING[] = "--delete-during ";
 
-constexpr char DELETE_AFTER[] = " --delete-after";
+constexpr char DELETE_AFTER[] = "--delete-after ";
 
-constexpr char DELETE_BEFORE[] = " --delete-before";
+constexpr char DELETE_BEFORE[] = "--delete-before ";
 
 constexpr char TAR[] = "tar -cf ";
 
