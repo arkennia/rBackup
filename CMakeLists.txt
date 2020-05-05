@@ -23,6 +23,8 @@ add_executable(rBackup
   backupjob.h
   utility.h
   mainwindow.ui
+  manager.cpp
+  manager.h
 )
 
 target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wsign-compare  -march=native -O1 -pipe -fno-plt -g
