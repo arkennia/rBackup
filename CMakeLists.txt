@@ -19,6 +19,9 @@ add_executable(rBackup
   main.cpp
   mainwindow.cpp
   mainwindow.h
+  backupjob.cpp
+  backupjob.h
+  utility.h
   mainwindow.ui
 )
 
