@@ -17,21 +17,13 @@
         along with rBackup.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef BACKUPJOB_H
-#define BACKUPJOB_H
+#ifndef MANAGER_H
+#define MANAGER_H
 
-#include <QString>
-
-class BackupJob
+class Manager
 {
     public:
-        BackupJob();
-
-    private:
-        QString name;
-        QString dest;
-        QString src;
-        QString command;
+        Manager();
 };
 
-#endif // BACKUPJOB_H
+#endif // MANAGER_H
