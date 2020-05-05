@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>802</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -19,9 +19,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="jobs">
        <attribute name="title">
@@ -29,14 +29,127 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
-         <widget class="QListWidget" name="listWidget"/>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Jobs</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listWidget"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QPushButton" name="newButton">
+              <property name="text">
+               <string>New</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="deleteButton">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit">
-          <property name="readOnly">
-           <bool>true</bool>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <property name="leftMargin">
+           <number>10</number>
           </property>
-         </widget>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Info</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPlainTextEdit" name="plainTextEdit">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="editButton">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="runButton">
+              <property name="text">
+               <string>Run</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="enableButton">
+              <property name="text">
+               <string>Enable</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -98,14 +211,14 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Directory</string>
+             <string>Source</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QLineEdit" name="backupDir"/>
+             <widget class="QLineEdit" name="source"/>
             </item>
             <item>
              <widget class="QPushButton" name="browseSrc">
@@ -133,6 +246,9 @@
               <property name="text">
                <string>Recurring</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
@@ -146,190 +262,15 @@
           </item>
           <item row="4" column="1">
            <layout class="QGridLayout" name="gridLayout">
-            <item row="9" column="2">
-             <widget class="QCheckBox" name="cvsExclude">
-              <property name="text">
-               <string>CVS Exclude(-C)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="preserveXAtrribs">
-              <property name="text">
-               <string>Preserve Extended Attributes(-X)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="archive">
-              <property name="text">
-               <string>Archive(-a)</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
-             <widget class="QCheckBox" name="relativePaths">
+             <widget class="QCheckBox" name="transferCompression">
               <property name="text">
-               <string>Relative Paths(-R)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QCheckBox" name="preserveHardLinks">
-              <property name="text">
-               <string>Preserve Hard Links(-H)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QCheckBox" name="preserveD">
-              <property name="text">
-               <string>Preserve Devices/Specials(-D)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QCheckBox" name="transformSym">
-              <property name="text">
-               <string>Transform Sumlinks(-L)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QCheckBox" name="dryRun">
-              <property name="text">
-               <string>Dry Run(-n)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QCheckBox" name="incremental">
-              <property name="text">
-               <string>Incremental(-u)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QCheckBox" name="preserveACLs">
-              <property name="text">
-               <string>Preserve ACLs(-A)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QCheckBox" name="wholeFile">
-              <property name="text">
-               <string>Whole File(-W)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QCheckBox" name="super_2">
-              <property name="text">
-               <string>Super</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0">
-             <widget class="QCheckBox" name="keepPartial">
-              <property name="text">
-               <string>Keep Partial</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QCheckBox" name="preserveExectuability">
-              <property name="text">
-               <string>Preserve Executability(-E)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="recursive">
-              <property name="text">
-               <string>Recursive(-r)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="2">
-             <widget class="QCheckBox" name="compress">
-              <property name="text">
-               <string>Compress(-z)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QCheckBox" name="copyDirlinks">
-              <property name="text">
-               <string>Copy Dirlinks(-k)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QCheckBox" name="sparse">
-              <property name="text">
-               <string>Sparse(-S)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QCheckBox" name="keepPerms">
-              <property name="text">
-               <string>Keep Permissions(-p)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QCheckBox" name="preserveOwner">
-              <property name="text">
-               <string>Preserve Owner(-o) SU Only</string>
+               <string>Transfer Compression</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QCheckBox" name="copySym">
-              <property name="text">
-               <string>Copy Symlinks as Symlinks (-l)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QCheckBox" name="preserveModTime">
-              <property name="text">
-               <string>Preserve Mod Times(-t)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QCheckBox" name="preserveGroup">
-              <property name="text">
-               <string>Preserve Group(-g)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="1">
-             <widget class="QCheckBox" name="pruneEmpty">
-              <property name="text">
-               <string>Prune Empty(-m)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QCheckBox" name="keepDirlinks">
-              <property name="text">
-               <string>Keep Dirlinks(-K)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <widget class="QCheckBox" name="faeksuper">
-              <property name="text">
-               <string>Fake Super</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QComboBox" name="comboBox">
+             <widget class="QComboBox" name="deleteWhen">
               <item>
                <property name="text">
                 <string>Delete During</string>
@@ -337,43 +278,129 @@
               </item>
               <item>
                <property name="text">
-                <string>Delete Before</string>
+                <string>Delete After</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Delete After</string>
+                <string>Delete Before</string>
                </property>
               </item>
              </widget>
             </item>
-            <item row="10" column="1">
-             <widget class="QCheckBox" name="checkBox_30">
+            <item row="0" column="2">
+             <widget class="QComboBox" name="backupCompression">
+              <item>
+               <property name="text">
+                <string>No Compression</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>tar</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>tar.gz</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>tar.bz</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>tar.xz</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Update at End</string>
+               <string/>
               </property>
              </widget>
             </item>
-            <item row="8" column="1">
-             <widget class="QCheckBox" name="partialProgress">
-              <property name="text">
-               <string>Partial/Progress(-P)</string>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="backupType">
+              <property name="currentIndex">
+               <number>0</number>
               </property>
+              <item>
+               <property name="text">
+                <string>Incremental Backup</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Incremental Backup W/o Delta</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Full Backup</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Full Backup W/o Delta</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
           </item>
-          <item row="5" column="0">
+          <item row="5" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QPushButton" name="generateButton">
+              <property name="text">
+               <string>Generate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Rsync Command</string>
+             <string>Backup Command</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="6" column="1">
            <widget class="QPlainTextEdit" name="command"/>
           </item>
-          <item row="6" column="1">
+          <item row="7" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="8" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
              <spacer name="horizontalSpacer_2">
@@ -410,7 +437,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>802</width>
      <height>22</height>
     </rect>
    </property>
