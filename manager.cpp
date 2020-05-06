@@ -38,7 +38,7 @@ void Manager::set_service_path(QString path)
         }
 }
 
-void Manager::save_jobs()
+int Manager::save_jobs()
 {
         QJsonArray arr;
 
@@ -64,11 +64,23 @@ void Manager::save_jobs()
 
         if (!backups.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
                 show_error_dialog("Unable to save backups!");
-                return;
+                return -1;
         }
 
         QJsonDocument doc(arr);
         backups.write(doc.toJson());
+        return 0;
+}
+
+int Manager::add_new_job(BackupJob job)
+{
+        std::string tmp = job.name.toStdString();
+        if (jobs.count(tmp) != 0) {
+                show_error_dialog("A job with that name already exists!");
+                return -1;
+        }
+        jobs[tmp] = job;
+        return 0;
 }
 
 QJsonObject Manager::days_to_json(const BackupJob &job)

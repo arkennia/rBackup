@@ -132,5 +132,23 @@ class MainWindow : public QMainWindow
          * \return QString containing the compression command.
          */
         QString selectCompressionType() const;
+
+        /*!
+         * \brief Creates a BackupJob object based on the fields of the UI.
+         * \return BackupJob object with user data.
+         */
+        BackupJob create_job();
+
+        /*!
+         * \brief Creates the job flags based on data in form.
+         * \return JobFlags with correct values;
+         */
+        JobFlags create_flags();
+
+        /*!
+         * \brief Creates the days array based on the checkboxes.
+         * \return Days array with correct values set;
+         */
+        Days create_days();
 };
 #endif // MAINWINDOW_H

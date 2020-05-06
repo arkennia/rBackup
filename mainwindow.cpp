@@ -55,6 +55,23 @@ void MainWindow::on_generateButton_clicked()
         ui->command->setPlainText(generate());
 }
 
+void MainWindow::on_finish_clicked()
+{
+        ui->tabs->setCurrentIndex(0);
+}
+
+void MainWindow::on_newButton_clicked()
+{
+        ui->tabs->setCurrentIndex(1);
+}
+
+void MainWindow::on_actionService_Path_triggered()
+{
+        QString fileName = QFileDialog::getExistingDirectory(
+                this, tr("Select Directory"), "/usr/lib/systemd/system",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+}
+
 QString MainWindow::generate() const
 {
         QString tmp = "", out = selectBackupType();
@@ -141,19 +158,14 @@ QString MainWindow::selectCompressionType() const
         return out;
 }
 
-void MainWindow::on_finish_clicked()
+BackupJob MainWindow::create_job()
 {
-        ui->tabs->setCurrentIndex(0);
 }
 
-void MainWindow::on_newButton_clicked()
+JobFlags MainWindow::create_flags()
 {
-        ui->tabs->setCurrentIndex(1);
 }
 
-void MainWindow::on_actionService_Path_triggered()
+Days MainWindow::create_days()
 {
-        QString fileName = QFileDialog::getExistingDirectory(
-                this, tr("Select Directory"), "/usr/lib/systemd/system",
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 }
