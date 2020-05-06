@@ -20,6 +20,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "manager.h"
 #include <QFileDialog>
 #include <QMainWindow>
 #include <stdexcept>
@@ -43,6 +44,10 @@ class MainWindow : public QMainWindow
     public:
         MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
+        MainWindow(const MainWindow &) = delete;
+        MainWindow(MainWindow &&) = delete;
+        MainWindow &operator=(const MainWindow &) = delete;
+        MainWindow &operator=(MainWindow &&) = delete;
 
     private slots:
 
@@ -79,8 +84,15 @@ class MainWindow : public QMainWindow
          */
         void on_newButton_clicked();
 
+        /*!
+         * \brief Event triggered when the Service Path action selected
+         */
+        void on_actionService_Path_triggered();
+
     private:
         Ui::MainWindow *ui;
+
+        Manager *manager;
 
         /*!
          * \brief Generates the rsync command.

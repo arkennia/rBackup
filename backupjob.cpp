@@ -19,6 +19,44 @@
 
 #include "backupjob.h"
 
+BackupJob::BackupJob(QString name, QString dest, QString src, QString command, Days days,
+                     JobFlags flags, bool enabled)
+        : name(name), dest(dest), src(src), command(command), days(days), flags(flags),
+          enabled(enabled)
+{
+}
+
 BackupJob::BackupJob()
 {
+        name = "";
+        dest = "";
+        src = "";
+        command = "";
+        days = Days();
+        flags = JobFlags();
+        enabled = false;
+}
+
+std::string BackupJob::get_service() const
+{
+        if (command == "" || dest == "" || src == "")
+                return "";
+        QString out = "[Unit]\n";
+        out += "Description: Runs an rsync command " + name + "\n\n";
+        out += "[Service]\n";
+        out += "Type=oneshot\n";
+        out += "ExecStart=/bin/" + command;
+        out += "\n\n";
+        out += "[Install]\n";
+        out += "WantedBy=multi-user.target\n";
+        return out.toStdString();
+}
+
+std::string BackupJob::get_timer() const
+{
+        if (command == "" || dest == "" || src == "")
+                return "";
+        QString out = "[Timer]\n";
+        out += "Unit=" + name + ".service\n";
+        out += "OnCalendar=";
 }

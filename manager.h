@@ -20,10 +20,41 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
+#include "backupjob.h"
+#include "utility.h"
+#include <QJsonObject>
+#include <unordered_map>
+
 class Manager
 {
     public:
         Manager();
+        ~Manager() = default;
+        Manager(const Manager &) = delete;
+        Manager &operator=(const Manager &) = delete;
+        Manager(Manager &&) = default;
+        Manager &operator=(Manager &&) = default;
+
+        /*!
+         * \brief Sets the path to store the services.
+         * \param QString path to service folder.
+         */
+        void set_service_path(QString path);
+
+        /*!
+         * \brief Save all jobs to json.
+         */
+        void save_jobs();
+
+    private:
+        /*
+         * Uses unordered map to easily make sure there are no duplicates.
+         */
+        std::unordered_map<std::string, BackupJob> jobs;
+        std::string path;
+
+        QJsonObject days_to_json(const BackupJob &job);
+        QJsonObject jobflags_to_json(const BackupJob &job);
 };
 
 #endif // MANAGER_H

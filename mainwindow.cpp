@@ -19,16 +19,17 @@
 
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "utility.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
         ui->setupUi(this);
+        manager = new Manager();
 }
 
 MainWindow::~MainWindow()
 {
         delete ui;
+        delete manager;
 }
 
 void MainWindow::on_browseDest_clicked()
@@ -64,7 +65,7 @@ QString MainWindow::generate() const
         out += selectDeleteType();
         out += ui->source->text() + " ";
         out += ui->destination->text() + " ";
-        out += "\n";
+        out += " && ";
         out += selectCompressionType();
 
         return out;
@@ -75,6 +76,7 @@ QString MainWindow::selectBackupType() const
         QString out = "";
 
         switch (ui->backupType->currentIndex()) {
+                void on_actionServicePath_triggered();
         case 0:
                 out += INCREMENTAL_OPTIONS;
                 break;
@@ -147,4 +149,11 @@ void MainWindow::on_finish_clicked()
 void MainWindow::on_newButton_clicked()
 {
         ui->tabs->setCurrentIndex(1);
+}
+
+void MainWindow::on_actionService_Path_triggered()
+{
+        QString fileName = QFileDialog::getExistingDirectory(
+                this, tr("Select Directory"), "/usr/lib/systemd/system",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 }

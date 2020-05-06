@@ -20,6 +20,7 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <QMessageBox>
 #include <QString>
 
 constexpr char INCREMENTAL_OPTIONS[] = "rsync -auq ";
@@ -43,5 +44,12 @@ constexpr char TAR_GZ[] = "tar -czf "; // .gz
 constexpr char TAR_BZ[] = "tar -cjf "; // .bz2
 
 constexpr char TAR_XZ[] = "tar -cJf "; //.xz
+
+inline void show_error_dialog(QString text)
+{
+        QMessageBox box;
+        box.setText(text);
+        box.exec();
+}
 
 #endif // UTILITY_H

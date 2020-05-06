@@ -21,17 +21,62 @@
 #define BACKUPJOB_H
 
 #include <QString>
+#include <array>
+
+// Forward declaration used to make Manager a friend.
+class Manager;
+
+// Enums corresponding to the index on the combo box in the ui.
+enum DeleteType { DURING, AFTER, BEFORE };
+enum CompressionType { NONE, TARBALL, GZ, BZ2, XZ };
+
+struct JobFlags {
+        bool transferCompression;
+        bool delta;
+        bool backupCompression;
+        bool recurring;
+        DeleteType deleteType;
+        CompressionType compType;
+};
+
+struct Days {
+        std::array<bool, 7> days;
+};
 
 class BackupJob
 {
     public:
+        friend class Manager;
+
+        BackupJob(QString name, QString dest, QString src, QString command, Days days,
+                  JobFlags flags, bool enabled = false);
         BackupJob();
+        ~BackupJob() = default;
+        BackupJob(const BackupJob &) = default;
+        BackupJob &operator=(const BackupJob &) = default;
+        BackupJob(BackupJob &&) = default;
+        BackupJob &operator=(BackupJob &&) = default;
+
+        /*!
+         * \brief Gets the text that will go into the .service file.
+         * \return std::string of data for the .service file.
+         */
+        std::string get_service() const;
+
+        /*!
+         * \brief Gets the text that will go into the .timer file.
+         * \return std::string of data for the .timer file.
+         */
+        std::string get_timer() const;
 
     private:
         QString name;
         QString dest;
         QString src;
         QString command;
+        Days days;
+        JobFlags flags;
+        bool enabled;
 };
 
 #endif // BACKUPJOB_H
