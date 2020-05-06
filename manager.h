@@ -39,7 +39,7 @@ class Manager
          * \brief Sets the path to store the services.
          * \param QString path to service folder.
          */
-        void set_service_path(QString path);
+        void set_service_path(QString servicePath);
 
         /*!
          * \brief Save all jobs to json.
@@ -60,22 +60,41 @@ class Manager
          */
         std::unordered_map<std::string, BackupJob> jobs;
 
-        // Service path
-        std::string path;
+        // Service path.
+        std::string servicePath;
+
+        // Configuration file path.
+        std::string configPath;
+
+        // Backup file path
+        std::string backupPath;
+
+        /*!
+         * \brief Creates a Json object of a job.
+         * \param BackupJob to serialize.
+         * \return Serialized BackupJob.
+         */
+        QJsonObject job_to_json(const BackupJob &job) const;
 
         /*!
          * \brief Creates an object containing the days to run on.
          * \param BackupJob containg days array to serialize.
          * \return QJsonObject to add to the main object.
          */
-        QJsonObject days_to_json(const BackupJob &job);
+        QJsonObject days_to_json(const BackupJob &job) const;
 
         /*!
          * \brief Creates an object containing the job flags.
          * \param BackupJob containg JobFlags struct to serialize.
          * \return QJsonObject to add to the main object.
          */
-        QJsonObject jobflags_to_json(const BackupJob &job);
+        QJsonObject jobflags_to_json(const BackupJob &job) const;
+
+        /*!
+         * \brief Gets the home directory to store the json in.
+         * \return The home directory.
+         */
+        std::string find_home_directory() const;
 };
 
 #endif // MANAGER_H

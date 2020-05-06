@@ -20,8 +20,8 @@
 #include "backupjob.h"
 
 BackupJob::BackupJob(QString name, QString dest, QString src, QString command, Days days,
-                     JobFlags flags, bool enabled)
-        : name(name), dest(dest), src(src), command(command), days(days), flags(flags),
+                     JobFlags flags, QString time, bool enabled)
+        : name(name), dest(dest), src(src), command(command), flags(flags), days(days), time(time),
           enabled(enabled)
 {
 }
@@ -32,6 +32,7 @@ BackupJob::BackupJob()
         dest = "";
         src = "";
         command = "";
+        time = "";
         days = Days();
         flags = JobFlags();
         enabled = false;

@@ -22,17 +22,27 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <filesystem>
+#include <pwd.h>
+#include <unistd.h>
 
 Manager::Manager()
 {
-        path = "/usr/lib/systemd/system";
+        servicePath = "/usr/lib/systemd/system";
+        configPath = find_home_directory() + "/.rbackup/";
+        backupPath = configPath + "backups.json";
+        if (!std::filesystem::exists(configPath)) {
+                bool status = std::filesystem::create_directory(configPath);
+                if (!status) {
+                        throw std::system_error();
+                }
+        }
 }
 
 void Manager::set_service_path(QString path)
 {
         std::string tmp = path.toStdString();
         if (std::filesystem::exists(tmp)) {
-                this->path = tmp;
+                this->servicePath = tmp;
         } else {
                 show_error_dialog("Invalid path!");
         }
@@ -42,25 +52,11 @@ int Manager::save_jobs()
 {
         QJsonArray arr;
 
-        auto create_json = [&](const auto &job) {
-                QJsonObject json;
-                json["Name"] = job.second.name;
-                json["Src"] = job.second.src;
-                json["Dst"] = job.second.dest;
-                json["Command"] = job.second.command;
-                json["Enabled"] = job.second.enabled;
-                json["Days"] = days_to_json(job.second);
-                json["JobFlags"] = jobflags_to_json(job.second);
-
-                std::string tmp = path + job.second.name.toStdString() + ".service";
-                json["Service"] = QString(tmp.c_str());
-                arr.append(json);
-        };
-
         for (const auto &job : jobs) {
-                create_json(job);
+                arr.append(job_to_json(job.second));
         }
-        QFile backups("~/.rbackup/backups.json");
+
+        QFile backups(backupPath.c_str());
 
         if (!backups.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
                 show_error_dialog("Unable to save backups!");
@@ -83,20 +79,37 @@ int Manager::add_new_job(BackupJob job)
         return 0;
 }
 
-QJsonObject Manager::days_to_json(const BackupJob &job)
+QJsonObject Manager::job_to_json(const BackupJob &job) const
 {
         QJsonObject json;
-        json["Mon"] = job.days.days[0];
-        json["Tues"] = job.days.days[1];
-        json["Wed"] = job.days.days[2];
-        json["Thurs"] = job.days.days[3];
-        json["Fri"] = job.days.days[4];
-        json["Sat"] = job.days.days[5];
-        json["Sun"] = job.days.days[6];
+        json["Name"] = job.name;
+        json["Src"] = job.src;
+        json["Dst"] = job.dest;
+        json["Command"] = job.command;
+        json["Enabled"] = job.enabled;
+        json["Time"] = job.time;
+        json["Days"] = days_to_json(job);
+        json["JobFlags"] = jobflags_to_json(job);
+
+        std::string tmp = servicePath + "/" + job.name.toStdString() + ".service";
+        json["Service"] = QString(tmp.c_str());
         return json;
 }
 
-QJsonObject Manager::jobflags_to_json(const BackupJob &job)
+QJsonObject Manager::days_to_json(const BackupJob &job) const
+{
+        QJsonObject json;
+        json["Mon"] = job.days[0];
+        json["Tues"] = job.days[1];
+        json["Wed"] = job.days[2];
+        json["Thurs"] = job.days[3];
+        json["Fri"] = job.days[4];
+        json["Sat"] = job.days[5];
+        json["Sun"] = job.days[6];
+        return json;
+}
+
+QJsonObject Manager::jobflags_to_json(const BackupJob &job) const
 {
         QJsonObject json;
         json["TransferCompression"] = job.flags.transferCompression;
@@ -106,4 +119,18 @@ QJsonObject Manager::jobflags_to_json(const BackupJob &job)
         json["DeleteType"] = job.flags.deleteType;
         json["CompressionType"] = job.flags.compType;
         return json;
+}
+
+std::string Manager::find_home_directory() const
+{
+        char *path = nullptr;
+        path = getenv("XDG_CONFIG_HOME");
+        if (path != nullptr)
+                return path;
+
+        path = getenv("HOME");
+        if (path != nullptr)
+                return path;
+
+        return getpwuid(getuid())->pw_dir;
 }

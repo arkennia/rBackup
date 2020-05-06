@@ -20,10 +20,11 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+        : QMainWindow(parent), ui(new Ui::MainWindow), manager(new Manager()),
+          commandGenerated(false)
 {
         ui->setupUi(this);
-        manager = new Manager();
 }
 
 MainWindow::~MainWindow()
@@ -53,11 +54,14 @@ void MainWindow::on_browseSrc_clicked()
 void MainWindow::on_generateButton_clicked()
 {
         ui->command->setPlainText(generate());
+        commandGenerated = true;
 }
 
 void MainWindow::on_finish_clicked()
 {
         ui->tabs->setCurrentIndex(0);
+        manager->add_new_job(create_job());
+        manager->save_jobs();
 }
 
 void MainWindow::on_newButton_clicked()
@@ -82,7 +86,8 @@ QString MainWindow::generate() const
         out += selectDeleteType();
         out += ui->source->text() + " ";
         out += ui->destination->text() + " ";
-        out += " && ";
+        if (ui->backupCompression->currentIndex() != 0)
+                out += " && ";
         out += selectCompressionType();
 
         return out;
@@ -160,12 +165,46 @@ QString MainWindow::selectCompressionType() const
 
 BackupJob MainWindow::create_job()
 {
+        QString command = "";
+        if (commandGenerated)
+                command = ui->command->toPlainText();
+        else
+                command = generate();
+        return BackupJob(ui->jobName->text(), ui->destination->text(), ui->source->text(), command,
+                         create_days(), create_flags(), create_time());
 }
 
 JobFlags MainWindow::create_flags()
 {
+        JobFlags flags;
+        int index = ui->backupType->currentIndex();
+        flags.delta = index == 1 || index == 3;
+
+        flags.compType = (CompressionType)ui->backupCompression->currentIndex();
+        flags.deleteType = (DeleteType)ui->deleteWhen->currentIndex();
+        flags.recurring = ui->recurring->isChecked();
+        flags.backupCompression = flags.compType != 0;
+        flags.transferCompression = ui->transferCompression->isChecked();
+
+        return flags;
 }
 
 Days MainWindow::create_days()
 {
+        Days days;
+
+        days[0] = ui->monday->isChecked();
+        days[1] = ui->tuesday->isChecked();
+        days[2] = ui->wednesday->isChecked();
+        days[3] = ui->thursday->isChecked();
+        days[4] = ui->friday->isChecked();
+        days[5] = ui->saturday->isChecked();
+        days[6] = ui->sunday->isChecked();
+
+        return days;
+}
+
+QString MainWindow::create_time()
+{
+        return ui->timeEdit->time().toString();
 }

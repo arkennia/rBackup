@@ -39,9 +39,7 @@ struct JobFlags {
         CompressionType compType;
 };
 
-struct Days {
-        std::array<bool, 7> days;
-};
+typedef std::array<bool, 7> Days;
 
 class BackupJob
 {
@@ -49,7 +47,7 @@ class BackupJob
         friend class Manager;
 
         BackupJob(QString name, QString dest, QString src, QString command, Days days,
-                  JobFlags flags, bool enabled = false);
+                  JobFlags flags, QString time, bool enabled = false);
         BackupJob();
         ~BackupJob() = default;
         BackupJob(const BackupJob &) = default;
@@ -74,8 +72,10 @@ class BackupJob
         QString dest;
         QString src;
         QString command;
-        Days days;
         JobFlags flags;
+        Days days;
+        QString time;
+
         bool enabled;
 };
 

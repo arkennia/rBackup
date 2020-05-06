@@ -94,6 +94,8 @@ class MainWindow : public QMainWindow
 
         Manager *manager;
 
+        bool commandGenerated;
+
         /*!
          * \brief Generates the rsync command.
          * \return QString containing the backup commands.
@@ -150,5 +152,11 @@ class MainWindow : public QMainWindow
          * \return Days array with correct values set;
          */
         Days create_days();
+
+        /*!
+         * \brief Creates the string for the time to run the job.
+         * \return Time string.
+         */
+        QString create_time();
 };
 #endif // MAINWINDOW_H

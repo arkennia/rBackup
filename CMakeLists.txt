@@ -27,7 +27,7 @@ add_executable(rBackup
   manager.h
 )
 
-target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wsign-compare  -march=native -O1 -pipe -fno-plt -g
+target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare  -march=native -O1 -pipe -fno-plt -g
     -fwrapv -fomit-frame-pointer
 )
 
