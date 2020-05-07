@@ -7,7 +7,7 @@ Currently in heavy development. I will put up a release on the first workable ve
 
 ### Building
 
-cd build
-cmake ..
-make
-./rbackup
+cd build  
+cmake ..  
+make  
+./rbackup  
