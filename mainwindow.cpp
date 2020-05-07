@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
           commandGenerated(false)
 {
         ui->setupUi(this);
+        add_jobs_to_list();
 }
 
 MainWindow::~MainWindow()
@@ -163,7 +164,7 @@ QString MainWindow::selectCompressionType() const
         return out;
 }
 
-BackupJob MainWindow::create_job()
+BackupJob MainWindow::create_job() const
 {
         QString command = "";
         if (commandGenerated)
@@ -174,7 +175,7 @@ BackupJob MainWindow::create_job()
                          create_days(), create_flags(), create_time());
 }
 
-JobFlags MainWindow::create_flags()
+JobFlags MainWindow::create_flags() const
 {
         JobFlags flags;
         int index = ui->backupType->currentIndex();
@@ -189,7 +190,7 @@ JobFlags MainWindow::create_flags()
         return flags;
 }
 
-Days MainWindow::create_days()
+Days MainWindow::create_days() const
 {
         Days days;
 
@@ -204,7 +205,15 @@ Days MainWindow::create_days()
         return days;
 }
 
-QString MainWindow::create_time()
+QString MainWindow::create_time() const
 {
         return ui->timeEdit->time().toString();
+}
+
+void MainWindow::add_jobs_to_list()
+{
+        std::list<std::string> list = manager->get_job_names();
+        for (const auto &name : list) {
+                ui->jobNamesList->addItem(QString::fromStdString(name));
+        }
 }

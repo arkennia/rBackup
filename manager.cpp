@@ -22,6 +22,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <pwd.h>
 #include <unistd.h>
 
@@ -36,6 +38,7 @@ Manager::Manager()
                         throw std::system_error();
                 }
         }
+        load_jobs();
 }
 
 void Manager::set_service_path(QString path)
@@ -51,7 +54,7 @@ void Manager::set_service_path(QString path)
 int Manager::save_jobs()
 {
         QJsonArray arr;
-
+        QJsonObject obj;
         for (const auto &job : jobs) {
                 arr.append(job_to_json(job.second));
         }
@@ -62,9 +65,34 @@ int Manager::save_jobs()
                 show_error_dialog("Unable to save backups!");
                 return -1;
         }
-
-        QJsonDocument doc(arr);
+        obj["jobs"] = arr;
+        QJsonDocument doc(obj);
         backups.write(doc.toJson());
+        return 0;
+}
+
+int Manager::load_jobs()
+{
+        QJsonDocument doc;
+        QFile backups(backupPath.c_str());
+        if (!backups.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                return -1;
+        }
+
+        QJsonParseError err;
+        doc = QJsonDocument::fromJson(backups.readAll(), &err);
+        if (err.error != QJsonParseError::NoError) {
+                std::cerr << "Error string: " + err.errorString().toStdString() << "\n";
+        }
+
+        QJsonObject obj = doc.object();
+        QJsonArray arr = obj["jobs"].toArray();
+
+        BackupJob job;
+        for (int i = 0; i < arr.size(); i++) {
+                job = job_from_json(arr[i].toObject());
+                jobs[job.name.toStdString()] = job;
+        }
         return 0;
 }
 
@@ -77,6 +105,15 @@ int Manager::add_new_job(BackupJob job)
         }
         jobs[tmp] = job;
         return 0;
+}
+
+std::list<std::string> Manager::get_job_names() const
+{
+        std::list<std::string> list;
+        for (const auto &key : jobs) {
+                list.push_back(key.first);
+        }
+        return list;
 }
 
 QJsonObject Manager::job_to_json(const BackupJob &job) const
@@ -133,4 +170,44 @@ std::string Manager::find_home_directory() const
                 return path;
 
         return getpwuid(getuid())->pw_dir;
+}
+
+BackupJob Manager::job_from_json(const QJsonObject &json) const
+{
+        BackupJob job;
+        QJsonObject jflags = json["Flags"].toObject();
+        QJsonObject jdays = json["Days"].toObject();
+        job.name = json["Name"].toString();
+        job.src = json["Src"].toString();
+        job.dest = json["Dest"].toString();
+        job.time = json["Time"].toString();
+        job.command = json["Command"].toString();
+        job.flags = jobflags_from_json(jflags);
+        job.days = days_from_json(jdays);
+        return job;
+}
+
+Days Manager::days_from_json(const QJsonObject &json) const
+{
+        Days days;
+        days[0] = json["Mon"].toBool();
+        days[1] = json["Tues"].toBool();
+        days[2] = json["Wed"].toBool();
+        days[3] = json["Thurs"].toBool();
+        days[4] = json["Fri"].toBool();
+        days[5] = json["Sat"].toBool();
+        days[6] = json["Sun"].toBool();
+        return days;
+}
+
+JobFlags Manager::jobflags_from_json(const QJsonObject &json) const
+{
+        JobFlags flags;
+        flags.delta = json["Delta"].toBool();
+        flags.compType = (CompressionType)json["CompressionType"].toInt();
+        flags.recurring = json["Recurring"].toBool();
+        flags.deleteType = (DeleteType)json["DeleteType"].toInt();
+        flags.backupCompression = json["BackupCompression"].toBool();
+        flags.transferCompression = json["transferCompression"].toBool();
+        return flags;
 }

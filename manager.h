@@ -48,11 +48,19 @@ class Manager
         int save_jobs();
 
         /*!
+         * \brief Loads the backups into the manager.
+         * \return 0 for success, -1 for failure;
+         */
+        int load_jobs();
+
+        /*!
          * \brief Adds the given job to the jobs map.
          * \param Creates a copy of the BackupJob passed to it.
          * \return 0 for success, -1 for failure.
          */
         int add_new_job(BackupJob job);
+
+        std::list<std::string> get_job_names() const;
 
     private:
         /*
@@ -95,6 +103,27 @@ class Manager
          * \return The home directory.
          */
         std::string find_home_directory() const;
+
+        /*!
+         * \brief Creates a job from json.
+         * \param QJsonObject containing the job.
+         * \return BackupJob to be saved into the map.
+         */
+        BackupJob job_from_json(const QJsonObject &json) const;
+
+        /*!
+         * \brief Create a days array from the json file.
+         * \param QJsonObject containing the days data.
+         * \return Days array.
+         */
+        Days days_from_json(const QJsonObject &json) const;
+
+        /*!
+         * \brief Creates the proper flags from json.
+         * \param QJsonObject containing the flags.
+         * \return JobFlags set with correct values.
+         */
+        JobFlags jobflags_from_json(const QJsonObject &json) const;
 };
 
 #endif // MANAGER_H

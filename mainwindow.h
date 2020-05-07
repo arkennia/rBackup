@@ -1,4 +1,4 @@
-/*
+﻿/*
         Copyright Jonathan Manly 2020
 
         This file is part of rBackup.
@@ -139,24 +139,29 @@ class MainWindow : public QMainWindow
          * \brief Creates a BackupJob object based on the fields of the UI.
          * \return BackupJob object with user data.
          */
-        BackupJob create_job();
+        BackupJob create_job() const;
 
         /*!
          * \brief Creates the job flags based on data in form.
          * \return JobFlags with correct values;
          */
-        JobFlags create_flags();
+        JobFlags create_flags() const;
 
         /*!
          * \brief Creates the days array based on the checkboxes.
          * \return Days array with correct values set;
          */
-        Days create_days();
+        Days create_days() const;
 
         /*!
          * \brief Creates the string for the time to run the job.
          * \return Time string.
          */
-        QString create_time();
+        QString create_time() const;
+
+        /*!
+         * \brief Take jobs from manager's jobs map and list them in the QListWidget.
+         */
+        void add_jobs_to_list();
 };
 #endif // MAINWINDOW_H
