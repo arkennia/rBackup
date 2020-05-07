@@ -89,6 +89,8 @@ class MainWindow : public QMainWindow
          */
         void on_actionService_Path_triggered();
 
+        void on_jobNamesList_itemSelectionChanged();
+
     private:
         Ui::MainWindow *ui;
 

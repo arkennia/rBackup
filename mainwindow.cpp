@@ -217,3 +217,14 @@ void MainWindow::add_jobs_to_list()
                 ui->jobNamesList->addItem(QString::fromStdString(name));
         }
 }
+
+void MainWindow::on_jobNamesList_itemSelectionChanged()
+{
+        QString jobname = ui->jobNamesList->selectedItems().first()->text();
+        QString jobText = manager->get_job(jobname);
+        if (jobText == "") {
+                show_error_dialog("Job not found!");
+                return;
+        }
+        ui->jobInfo->setPlainText(jobText);
+}

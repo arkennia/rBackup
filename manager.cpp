@@ -116,6 +116,14 @@ std::list<std::string> Manager::get_job_names() const
         return list;
 }
 
+QString Manager::get_job(QString name)
+{
+        if (jobs.count(name.toStdString()) != 0)
+                return jobs[name.toStdString()].to_string();
+        else
+                return "";
+}
+
 QJsonObject Manager::job_to_json(const BackupJob &job) const
 {
         QJsonObject json;
@@ -175,11 +183,11 @@ std::string Manager::find_home_directory() const
 BackupJob Manager::job_from_json(const QJsonObject &json) const
 {
         BackupJob job;
-        QJsonObject jflags = json["Flags"].toObject();
+        QJsonObject jflags = json["JobFlags"].toObject();
         QJsonObject jdays = json["Days"].toObject();
         job.name = json["Name"].toString();
         job.src = json["Src"].toString();
-        job.dest = json["Dest"].toString();
+        job.dest = json["Dst"].toString();
         job.time = json["Time"].toString();
         job.command = json["Command"].toString();
         job.flags = jobflags_from_json(jflags);
@@ -208,6 +216,6 @@ JobFlags Manager::jobflags_from_json(const QJsonObject &json) const
         flags.recurring = json["Recurring"].toBool();
         flags.deleteType = (DeleteType)json["DeleteType"].toInt();
         flags.backupCompression = json["BackupCompression"].toBool();
-        flags.transferCompression = json["transferCompression"].toBool();
+        flags.transferCompression = json["TransferCompression"].toBool();
         return flags;
 }

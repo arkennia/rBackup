@@ -62,6 +62,13 @@ class Manager
 
         std::list<std::string> get_job_names() const;
 
+        /*!
+         * \brief Looks for the given job
+         * \param QString name of the job to locate.
+         * \return The located job string.
+         */
+        QString get_job(QString name);
+
     private:
         /*
          * Uses unordered map to easily make sure there are no duplicates.

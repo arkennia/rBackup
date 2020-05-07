@@ -67,6 +67,18 @@ class BackupJob
          */
         std::string get_timer() const;
 
+        /*!
+         * \brief Converts the job to an easily displayed QString.
+         * \return QString containing formatted output of a job.
+         */
+        QString to_string() const;
+
+        /*!
+         * \brief Converts the job to an easily displayed std::string.
+         * \return std::string containing formatted output of a job.
+         */
+        std::string to_std_string() const;
+
     private:
         QString name;
         QString dest;
@@ -77,6 +89,12 @@ class BackupJob
         QString time;
 
         bool enabled;
+
+        QString jobflags_to_string() const;
+
+        QString days_to_string() const;
+
+        QString bool_to_string(bool val) const;
 };
 
 #endif // BACKUPJOB_H
