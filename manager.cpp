@@ -83,8 +83,10 @@ int Manager::load_jobs()
         doc = QJsonDocument::fromJson(backups.readAll(), &err);
         if (err.error != QJsonParseError::NoError) {
                 std::cerr << "Error string: " + err.errorString().toStdString() << "\n";
+                return -1;
+        } else if (doc.isNull()) {
+                return 0;
         }
-
         QJsonObject obj = doc.object();
         QJsonArray arr = obj["jobs"].toArray();
 
@@ -116,12 +118,28 @@ std::list<std::string> Manager::get_job_names() const
         return list;
 }
 
-QString Manager::get_job(QString name)
+QString Manager::get_job_text(QString name)
 {
         if (jobs.count(name.toStdString()) != 0)
                 return jobs[name.toStdString()].to_string();
         else
                 return "";
+}
+
+int Manager::update_job(BackupJob job)
+{
+        std::string jobname = job.name.toStdString();
+        if (jobs.count(jobname) != 0) {
+                jobs[jobname] = job;
+                return 0;
+        }
+        show_error_dialog("Unable to update job.");
+        return -1;
+}
+
+const BackupJob &Manager::get_job(std::string name)
+{
+        return jobs[name];
 }
 
 QJsonObject Manager::job_to_json(const BackupJob &job) const
@@ -163,6 +181,7 @@ QJsonObject Manager::jobflags_to_json(const BackupJob &job) const
         json["Recurring"] = job.flags.recurring;
         json["DeleteType"] = job.flags.deleteType;
         json["CompressionType"] = job.flags.compType;
+        json["BackupType"] = job.flags.backupType;
         return json;
 }
 
@@ -217,5 +236,6 @@ JobFlags Manager::jobflags_from_json(const QJsonObject &json) const
         flags.deleteType = (DeleteType)json["DeleteType"].toInt();
         flags.backupCompression = json["BackupCompression"].toBool();
         flags.transferCompression = json["TransferCompression"].toBool();
+        flags.backupType = (BackupType)json["BackupType"].toInt();
         return flags;
 }

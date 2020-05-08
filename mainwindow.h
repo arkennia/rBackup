@@ -32,6 +32,8 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
+enum Tabs { JOBS, SETTINGS };
+
 /*!
  * \brief The MainWindow class
  * Manages the UI and also has a reference to an object
@@ -91,12 +93,22 @@ class MainWindow : public QMainWindow
 
         void on_jobNamesList_itemSelectionChanged();
 
+        void on_editButton_clicked();
+
     private:
         Ui::MainWindow *ui;
 
         Manager *manager;
 
+        std::array<QCheckBox *, 7> checkboxes;
+
         bool commandGenerated;
+        bool isUpdating;
+
+        /*!
+         * \brief Populates an array of the days checkboxes.
+         */
+        void create_checkbox_array();
 
         /*!
          * \brief Generates the rsync command.
@@ -165,5 +177,22 @@ class MainWindow : public QMainWindow
          * \brief Take jobs from manager's jobs map and list them in the QListWidget.
          */
         void add_jobs_to_list();
+
+        /*!
+         * \brief Loads a job's information into the Settings form.
+         * \param BackupJob to load.
+         */
+        void edit_job(const BackupJob &job);
+
+        /*!
+         * \brief Uses the given Days array to set the checkboxes.
+         * \param Days to use for the checkboxes.
+         */
+        void set_days_from_array(const Days &days);
+
+        /*!
+         * \brief Clears the settings after a successful edit or add.
+         */
+        void clear_form();
 };
 #endif // MAINWINDOW_H

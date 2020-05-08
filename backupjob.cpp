@@ -19,7 +19,7 @@
 
 #include "backupjob.h"
 
-const static std::string shortDays[] = {"M", "Tu", "W", "Th", "F", "Sa", "Su"};
+const static std::string shortDays[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
 BackupJob::BackupJob(QString name, QString dest, QString src, QString command, Days days,
                      JobFlags flags, QString time, bool enabled)
@@ -82,6 +82,41 @@ QString BackupJob::to_string() const
 std::string BackupJob::to_std_string() const
 {
         return to_string().toStdString();
+}
+
+QString BackupJob::get_name() const
+{
+        return name;
+}
+
+QString BackupJob::get_dest() const
+{
+        return dest;
+}
+
+QString BackupJob::get_src() const
+{
+        return src;
+}
+
+JobFlags BackupJob::get_flags() const
+{
+        return flags;
+}
+
+Days BackupJob::get_days() const
+{
+        return days;
+}
+
+QString BackupJob::get_time() const
+{
+        return time;
+}
+
+QString BackupJob::get_command() const
+{
+        return command;
 }
 
 QString BackupJob::jobflags_to_string() const

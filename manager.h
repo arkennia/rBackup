@@ -60,6 +60,10 @@ class Manager
          */
         int add_new_job(BackupJob job);
 
+        /*!
+         * \brief Gets all the names of the jobs.
+         * \return List of names.
+         */
         std::list<std::string> get_job_names() const;
 
         /*!
@@ -67,7 +71,21 @@ class Manager
          * \param QString name of the job to locate.
          * \return The located job string.
          */
-        QString get_job(QString name);
+        QString get_job_text(QString name);
+
+        /*!
+         * \brief Update a job in the job's list.
+         * \param job
+         * \return
+         */
+        int update_job(BackupJob job);
+
+        /*!
+         * \brief Retrieves the given job.
+         * \param Name of the job to retrieve.
+         * \return Const Ref to the requested BackupJob.
+         */
+        const BackupJob &get_job(std::string name);
 
     private:
         /*

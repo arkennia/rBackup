@@ -29,6 +29,7 @@ class Manager;
 // Enums corresponding to the index on the combo box in the ui.
 enum DeleteType { DURING, AFTER, BEFORE };
 enum CompressionType { NONE, TARBALL, GZ, BZ2, XZ };
+enum BackupType { INCREMENTAL, INCREMENTAL_NO_D, FULL, FULL_NO_D };
 
 struct JobFlags {
         bool transferCompression;
@@ -37,6 +38,7 @@ struct JobFlags {
         bool recurring;
         DeleteType deleteType;
         CompressionType compType;
+        BackupType backupType;
 };
 
 typedef std::array<bool, 7> Days;
@@ -79,6 +81,48 @@ class BackupJob
          */
         std::string to_std_string() const;
 
+        /*!
+         * \brief Retrieves the name of the job.
+         * \return Name of the job.
+         */
+        QString get_name() const;
+
+        /*!
+         * \brief Retrieves the destination of the job.
+         * \return Destination of the job.
+         */
+        QString get_dest() const;
+
+        /*!
+         * \brief Retrieves the source of the job.
+         * \return Source of the job.
+         */
+        QString get_src() const;
+
+        /*!
+         * \brief Retrieves the flags of the job.
+         * \return Flags of the job.
+         */
+        JobFlags get_flags() const;
+
+        /*!
+         * \brief Retrieves the days to run of the job.
+         * \return Days to run of the job.
+         */
+        Days get_days() const;
+
+        /*!
+         * \brief Retrieves the time to run of the job.
+         * \return Time to run of the job.
+         */
+        QString get_time() const;
+
+        /*!
+         * \brief Retrieves the command.
+         * \return The command.
+         */
+        QString get_command() const;
+
     private:
         QString name;
         QString dest;
@@ -95,6 +139,12 @@ class BackupJob
         QString days_to_string() const;
 
         QString bool_to_string(bool val) const;
+
+        /*!
+         * \brief Creates the string for "OnCalendar" of the systemd timer.
+         * \return Calendar formatted for the timer.
+         */
+        QString make_systemd_calendar() const;
 };
 
 #endif // BACKUPJOB_H

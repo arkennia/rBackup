@@ -22,10 +22,11 @@
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow), manager(new Manager()),
-          commandGenerated(false)
+          commandGenerated(false), isUpdating(false)
 {
         ui->setupUi(this);
         add_jobs_to_list();
+        create_checkbox_array();
 }
 
 MainWindow::~MainWindow()
@@ -60,14 +61,28 @@ void MainWindow::on_generateButton_clicked()
 
 void MainWindow::on_finish_clicked()
 {
-        ui->tabs->setCurrentIndex(0);
-        manager->add_new_job(create_job());
+        ui->tabs->setCurrentIndex(JOBS);
+        int status = 0;
+        if (!isUpdating) {
+                status = manager->add_new_job(create_job());
+                if (!status) {
+                        ui->jobNamesList->addItem(ui->jobName->text());
+                        clear_form();
+                }
+
+        } else {
+                status = manager->update_job(create_job());
+                if (!status)
+                        clear_form();
+                ui->jobName->setEnabled(true);
+                isUpdating = false;
+        }
         manager->save_jobs();
 }
 
 void MainWindow::on_newButton_clicked()
 {
-        ui->tabs->setCurrentIndex(1);
+        ui->tabs->setCurrentIndex(SETTINGS);
 }
 
 void MainWindow::on_actionService_Path_triggered()
@@ -186,6 +201,7 @@ JobFlags MainWindow::create_flags() const
         flags.recurring = ui->recurring->isChecked();
         flags.backupCompression = flags.compType != 0;
         flags.transferCompression = ui->transferCompression->isChecked();
+        flags.backupType = (BackupType)ui->backupType->currentIndex();
 
         return flags;
 }
@@ -193,15 +209,9 @@ JobFlags MainWindow::create_flags() const
 Days MainWindow::create_days() const
 {
         Days days;
-
-        days[0] = ui->monday->isChecked();
-        days[1] = ui->tuesday->isChecked();
-        days[2] = ui->wednesday->isChecked();
-        days[3] = ui->thursday->isChecked();
-        days[4] = ui->friday->isChecked();
-        days[5] = ui->saturday->isChecked();
-        days[6] = ui->sunday->isChecked();
-
+        for (size_t i = 0; i < days.size(); i++) {
+                days[i] = checkboxes[i]->isChecked();
+        }
         return days;
 }
 
@@ -218,13 +228,77 @@ void MainWindow::add_jobs_to_list()
         }
 }
 
+void MainWindow::edit_job(const BackupJob &job)
+{
+        isUpdating = true;
+        JobFlags tmp = job.get_flags();
+        ui->jobName->setText(job.get_name());
+        ui->jobName->setEnabled(false); // prevent change of jobname.
+        set_days_from_array(job.get_days());
+        ui->source->setText(job.get_src());
+        ui->destination->setText(job.get_dest());
+        ui->recurring->setChecked(tmp.recurring);
+        ui->timeEdit->setTime(QTime::fromString(job.get_time()));
+        ui->command->setPlainText(job.get_command());
+        ui->deleteWhen->setCurrentIndex(tmp.deleteType);
+        ui->backupCompression->setCurrentIndex(tmp.compType);
+        ui->transferCompression->setChecked(tmp.transferCompression);
+        ui->backupType->setCurrentIndex(tmp.backupType);
+}
+
+void MainWindow::set_days_from_array(const Days &days)
+{
+        for (size_t i = 0; i < days.size(); i++) {
+                checkboxes[i]->setChecked(days[i]);
+        }
+}
+
+void MainWindow::clear_form()
+{
+        ui->jobName->setText("");
+        ui->source->setText("");
+        ui->destination->setText("");
+        ui->recurring->setChecked(true);
+        ui->timeEdit->setTime(QTime::currentTime());
+        ui->command->setPlainText("");
+        ui->deleteWhen->setCurrentIndex(0);
+        ui->backupCompression->setCurrentIndex(0);
+        ui->backupType->setCurrentIndex(0);
+        ui->transferCompression->setChecked(0);
+
+        for (size_t i = 0; i < checkboxes.size(); i++) {
+                checkboxes[i]->setChecked(false);
+        }
+}
+
 void MainWindow::on_jobNamesList_itemSelectionChanged()
 {
         QString jobname = ui->jobNamesList->selectedItems().first()->text();
-        QString jobText = manager->get_job(jobname);
+        QString jobText = manager->get_job_text(jobname);
         if (jobText == "") {
                 show_error_dialog("Job not found!");
                 return;
         }
         ui->jobInfo->setPlainText(jobText);
+}
+
+void MainWindow::on_editButton_clicked()
+{
+        ui->tabs->setCurrentIndex(SETTINGS);
+        try {
+                edit_job(manager->get_job(ui->jobNamesList->currentItem()->text().toStdString()));
+        } catch (std::exception &e) {
+                show_error_dialog(e.what());
+        }
+}
+
+void MainWindow::create_checkbox_array()
+{
+        checkboxes[0] = ui->monday;
+        checkboxes[1] = ui->tuesday;
+        checkboxes[2] = ui->wednesday;
+        checkboxes[3] = ui->thursday;
+        checkboxes[4] = ui->friday;
+        checkboxes[5] = ui->saturday;
+        checkboxes[6] = ui->sunday;
 }
