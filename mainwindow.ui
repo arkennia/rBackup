@@ -21,7 +21,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="jobs">
        <attribute name="title">
@@ -498,17 +498,11 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionService_Path"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionService_Path">
-   <property name="text">
-    <string>Service Path</string>
-   </property>
-  </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>

@@ -123,6 +123,8 @@ class BackupJob
          */
         QString get_command() const;
 
+        int create_systemd_objects();
+
     private:
         QString name;
         QString dest;
@@ -144,7 +146,9 @@ class BackupJob
          * \brief Creates the string for "OnCalendar" of the systemd timer.
          * \return Calendar formatted for the timer.
          */
-        QString make_systemd_calendar() const;
+        std::string make_systemd_calendar() const;
+
+        std::string make_shell_script() const;
 };
 
 #endif // BACKUPJOB_H

@@ -18,6 +18,7 @@
 */
 
 #include "backupjob.h"
+#include <QFile>
 
 const static std::string shortDays[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
@@ -39,7 +40,7 @@ BackupJob::BackupJob()
         flags = JobFlags();
         enabled = false;
 }
-
+// TODO Hardcode this to a user that I ensure is created.
 std::string BackupJob::get_service() const
 {
         if (command == "" || dest == "" || src == "")
@@ -48,7 +49,8 @@ std::string BackupJob::get_service() const
         out += "Description: Runs an rsync command " + name + "\n\n";
         out += "[Service]\n";
         out += "Type=oneshot\n";
-        out += "ExecStart=/bin/" + command;
+        out += "ExecStart=/etc/rbackup/" + name + ".sh\n";
+        out += "User=" + QString::fromStdString(getenv("USER"));
         out += "\n\n";
         out += "[Install]\n";
         out += "WantedBy=multi-user.target\n";
@@ -60,9 +62,14 @@ std::string BackupJob::get_timer() const
 {
         if (command == "" || dest == "" || src == "")
                 return "";
-        QString out = "[Timer]\n";
+        QString out = "[Unit]\nDescription=Runs the given service at specified time.\n";
+        out += "[Timer]\n";
         out += "Unit=" + name + ".service\n";
-        out += "OnCalendar=";
+        out += "OnCalendar=" + QString::fromStdString(make_systemd_calendar());
+        out += "\nPersistent=true";
+        out += "[Install]\n";
+        out += "WantedBy=timers.target";
+        return out.toStdString();
 }
 
 QString BackupJob::to_string() const
@@ -119,6 +126,25 @@ QString BackupJob::get_command() const
         return command;
 }
 
+int BackupJob::create_systemd_objects()
+{
+        QFile timer("/home/fane/.rbackup/" + name + ".timer");
+        QFile service("/home/fane/.rbackup/" + name + ".service");
+        QFile script("/home/fane/.rbackup/" + name + ".sh");
+
+        if (!timer.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        if (!service.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        if (!script.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        script.write(make_shell_script().c_str());
+        service.write(get_service().c_str());
+        timer.write(get_timer().c_str());
+
+        return 0;
+}
+
 QString BackupJob::jobflags_to_string() const
 {
         QString out = "";
@@ -146,4 +172,21 @@ QString BackupJob::days_to_string() const
 QString BackupJob::bool_to_string(bool val) const
 {
         return (val ? "true" : "false");
+}
+
+std::string BackupJob::make_systemd_calendar() const
+{
+        std::string out = "";
+        for (size_t i = 0; i < days.size(); i++) {
+                if (days[i])
+                        out += shortDays[i] + ",";
+        }
+        out += "*-*-*";
+        out += time.toStdString();
+        return out;
+}
+
+std::string BackupJob::make_shell_script() const
+{
+        return "#!/bin/bash\n\n" + command.toStdString();
 }

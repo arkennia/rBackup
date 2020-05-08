@@ -41,16 +41,6 @@ Manager::Manager()
         load_jobs();
 }
 
-void Manager::set_service_path(QString path)
-{
-        std::string tmp = path.toStdString();
-        if (std::filesystem::exists(tmp)) {
-                this->servicePath = tmp;
-        } else {
-                show_error_dialog("Invalid path!");
-        }
-}
-
 int Manager::save_jobs()
 {
         QJsonArray arr;
@@ -137,9 +127,40 @@ int Manager::update_job(BackupJob job)
         return -1;
 }
 
-const BackupJob &Manager::get_job(std::string name)
+const BackupJob &Manager::get_job(const std::string &name)
 {
         return jobs[name];
+}
+
+int Manager::enable_job(const std::string &name)
+{
+        if (jobs.count(name) != 0) {
+                jobs[name].enabled = true;
+                jobs[name].create_systemd_objects();
+                return 0;
+        }
+        return -1;
+}
+
+int Manager::run_job(const std::string &name)
+{
+        if (jobs.count(name) != 0) {
+                QDBusInterface interface("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+                                         "org.freedesktop.systemd1.Manager",
+                                         QDBusConnection::systemBus());
+                QDBusReply<QDBusObjectPath> reply;
+                if (!interface.isValid()) {
+                        show_error_dialog("Unable to connect to systemd.");
+                        return -1;
+                }
+                reply = interface.call("StopUnit", "sshd.service", "replace");
+                if (!reply.isValid())
+                        std::cout << reply.error().name().toStdString() << "\n";
+                else
+                        std::cout << reply.value().path().toStdString() << "\n";
+                return 0;
+        }
+        return -1;
 }
 
 QJsonObject Manager::job_to_json(const BackupJob &job) const

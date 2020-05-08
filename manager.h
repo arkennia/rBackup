@@ -23,6 +23,9 @@
 #include "backupjob.h"
 #include "utility.h"
 #include <QJsonObject>
+#include <QVariant>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusReply>
 #include <unordered_map>
 
 class Manager
@@ -34,12 +37,6 @@ class Manager
         Manager &operator=(const Manager &) = delete;
         Manager(Manager &&) = default;
         Manager &operator=(Manager &&) = default;
-
-        /*!
-         * \brief Sets the path to store the services.
-         * \param QString path to service folder.
-         */
-        void set_service_path(QString servicePath);
 
         /*!
          * \brief Save all jobs to json.
@@ -85,7 +82,21 @@ class Manager
          * \param Name of the job to retrieve.
          * \return Const Ref to the requested BackupJob.
          */
-        const BackupJob &get_job(std::string name);
+        const BackupJob &get_job(const std::string &name);
+
+        /*!
+         * \brief Enables the named job
+         * \param Name of job to enable.
+         * \return 0 for success, -1 for not found.
+         */
+        int enable_job(const std::string &name);
+
+        /*!
+         * \brief Runs the given job.
+         * \param Name of the job to run.
+         * \return 0 on succes, -1 on failure.
+         */
+        int run_job(const std::string &name);
 
     private:
         /*

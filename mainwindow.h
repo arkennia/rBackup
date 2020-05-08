@@ -21,6 +21,7 @@
 #define MAINWINDOW_H
 
 #include "manager.h"
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMainWindow>
 #include <stdexcept>
@@ -86,14 +87,15 @@ class MainWindow : public QMainWindow
          */
         void on_newButton_clicked();
 
-        /*!
-         * \brief Event triggered when the Service Path action selected
-         */
-        void on_actionService_Path_triggered();
-
         void on_jobNamesList_itemSelectionChanged();
 
         void on_editButton_clicked();
+
+        void on_enableButton_clicked();
+
+        void on_actionExit_triggered();
+
+        void on_runButton_clicked();
 
     private:
         Ui::MainWindow *ui;
@@ -194,5 +196,8 @@ class MainWindow : public QMainWindow
          * \brief Clears the settings after a successful edit or add.
          */
         void clear_form();
+
+    protected:
+        void closeEvent(QCloseEvent *event);
 };
 #endif // MAINWINDOW_H

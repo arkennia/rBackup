@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS DBus REQUIRED)
 
 add_executable(rBackup
   main.cpp
@@ -31,4 +32,4 @@ target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-pa
     -fwrapv -fomit-frame-pointer
 )
 
-target_link_libraries(rBackup PRIVATE Qt5::Widgets)
+target_link_libraries(rBackup PRIVATE Qt5::Widgets Qt5::DBus)

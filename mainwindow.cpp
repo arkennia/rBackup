@@ -85,13 +85,6 @@ void MainWindow::on_newButton_clicked()
         ui->tabs->setCurrentIndex(SETTINGS);
 }
 
-void MainWindow::on_actionService_Path_triggered()
-{
-        QString fileName = QFileDialog::getExistingDirectory(
-                this, tr("Select Directory"), "/usr/lib/systemd/system",
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-}
-
 QString MainWindow::generate() const
 {
         QString tmp = "", out = selectBackupType();
@@ -226,6 +219,7 @@ void MainWindow::add_jobs_to_list()
         for (const auto &name : list) {
                 ui->jobNamesList->addItem(QString::fromStdString(name));
         }
+        ui->jobNamesList->setCurrentRow(0);
 }
 
 void MainWindow::edit_job(const BackupJob &job)
@@ -301,4 +295,30 @@ void MainWindow::create_checkbox_array()
         checkboxes[4] = ui->friday;
         checkboxes[5] = ui->saturday;
         checkboxes[6] = ui->sunday;
+}
+
+void MainWindow::on_enableButton_clicked()
+{
+        int status = manager->enable_job(ui->jobNamesList->currentItem()->text().toStdString());
+        if (status)
+                show_error_dialog("Unable to enable job.");
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+        close();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+        QMessageBox::StandardButton save;
+        save = QMessageBox::question(this, "Exit", "Save before exiting?",
+                                     QMessageBox::Yes | QMessageBox::No);
+        if (save == QMessageBox::Yes)
+                manager->save_jobs();
+}
+
+void MainWindow::on_runButton_clicked()
+{
+        manager->run_job(ui->jobNamesList->currentItem()->text().toStdString());
 }
