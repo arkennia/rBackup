@@ -29,11 +29,11 @@
 
 Manager::Manager()
 {
-        servicePath = "/usr/lib/systemd/system";
-        configPath = find_home_directory() + "/.rbackup/";
+        servicePath = "/usr/lib/systemd/system/";
+        configPath = "/etc/rbackup/";
         backupPath = configPath + "backups.json";
-        if (!std::filesystem::exists(configPath)) {
-                bool status = std::filesystem::create_directory(configPath);
+        if (!std::filesystem::exists(configPath.toStdString())) {
+                bool status = std::filesystem::create_directory(configPath.toStdString());
                 if (!status) {
                         throw std::system_error();
                 }
@@ -49,7 +49,7 @@ int Manager::save_jobs()
                 arr.append(job_to_json(job.second));
         }
 
-        QFile backups(backupPath.c_str());
+        QFile backups(backupPath);
 
         if (!backups.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
                 show_error_dialog("Unable to save backups!");
@@ -64,7 +64,7 @@ int Manager::save_jobs()
 int Manager::load_jobs()
 {
         QJsonDocument doc;
-        QFile backups(backupPath.c_str());
+        QFile backups(backupPath);
         if (!backups.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 return -1;
         }
@@ -132,19 +132,55 @@ const BackupJob &Manager::get_job(const std::string &name)
         return jobs[name];
 }
 
-int Manager::enable_job(const std::string &name)
+int Manager::enable_job(const QString &name)
 {
-        if (jobs.count(name) != 0) {
-                jobs[name].enabled = true;
-                jobs[name].create_systemd_objects();
-                return 0;
+        int status = -1;
+        if (jobs.count(name.toStdString()) != 0) {
+                jobs[name.toStdString()].enabled = true;
+                status = create_systemd_objects(name);
+                QDBusInterface interface("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+                                         "org.freedesktop.systemd1.Manager",
+                                         QDBusConnection::systemBus());
+                QDBusReply<QDBusVariant> reply;
+                QDBusMessage msg;
+                QStringList arg = {name + ".timer"};
+                if (!interface.isValid()) {
+                        show_error_dialog("Unable to connect to systemd.");
+                        return -1;
+                }
+                msg = interface.call("EnableUnitFiles", arg, false, true);
+                std::cerr << msg.errorMessage().toStdString() << "\n";
+                interface.call("Reload");
         }
-        return -1;
+        return status;
 }
 
-int Manager::run_job(const std::string &name)
+int Manager::disable_job(const QString &name)
 {
-        if (jobs.count(name) != 0) {
+        int status = -1;
+        if (jobs.count(name.toStdString()) != 0) {
+                jobs[name.toStdString()].enabled = false;
+                status = create_systemd_objects(name);
+                QDBusInterface interface("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+                                         "org.freedesktop.systemd1.Manager",
+                                         QDBusConnection::systemBus());
+                QDBusReply<QDBusVariant> reply;
+                QDBusMessage msg;
+                QStringList arg = {name + ".timer"};
+                if (!interface.isValid()) {
+                        show_error_dialog("Unable to connect to systemd.");
+                        return -1;
+                }
+                msg = interface.call("DisableUnitFiles", arg, false);
+                std::cerr << msg.errorMessage().toStdString() << "\n";
+                interface.call("Reload");
+        }
+        return status;
+}
+
+int Manager::run_job(const QString &name)
+{
+        if (jobs.count(name.toStdString()) != 0) {
                 QDBusInterface interface("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
                                          "org.freedesktop.systemd1.Manager",
                                          QDBusConnection::systemBus());
@@ -153,12 +189,14 @@ int Manager::run_job(const std::string &name)
                         show_error_dialog("Unable to connect to systemd.");
                         return -1;
                 }
-                reply = interface.call("StopUnit", "sshd.service", "replace");
-                if (!reply.isValid())
-                        std::cout << reply.error().name().toStdString() << "\n";
-                else
-                        std::cout << reply.value().path().toStdString() << "\n";
-                return 0;
+                reply = interface.call("StartUnit", name + ".service", "replace");
+                if (!reply.isValid()) {
+                        std::cerr << reply.error().name().toStdString() << "\n";
+                        return -1;
+                } else {
+                        std::cerr << reply.value().path().toStdString() << "\n";
+                        return 0;
+                }
         }
         return -1;
 }
@@ -174,9 +212,7 @@ QJsonObject Manager::job_to_json(const BackupJob &job) const
         json["Time"] = job.time;
         json["Days"] = days_to_json(job);
         json["JobFlags"] = jobflags_to_json(job);
-
-        std::string tmp = servicePath + "/" + job.name.toStdString() + ".service";
-        json["Service"] = QString(tmp.c_str());
+        json["Service"] = servicePath + job.name + ".service";
         return json;
 }
 
@@ -206,7 +242,7 @@ QJsonObject Manager::jobflags_to_json(const BackupJob &job) const
         return json;
 }
 
-std::string Manager::find_home_directory() const
+QString Manager::find_home_directory() const
 {
         char *path = nullptr;
         path = getenv("XDG_CONFIG_HOME");
@@ -232,6 +268,7 @@ BackupJob Manager::job_from_json(const QJsonObject &json) const
         job.command = json["Command"].toString();
         job.flags = jobflags_from_json(jflags);
         job.days = days_from_json(jdays);
+        job.enabled = json["Enabled"].toBool();
         return job;
 }
 
@@ -259,4 +296,28 @@ JobFlags Manager::jobflags_from_json(const QJsonObject &json) const
         flags.transferCompression = json["TransferCompression"].toBool();
         flags.backupType = (BackupType)json["BackupType"].toInt();
         return flags;
+}
+
+int Manager::create_systemd_objects(const QString &name)
+{
+        QFile timer(servicePath + name + ".timer");
+        QFile service(servicePath + name + ".service");
+        QFile script(configPath + name + ".sh");
+
+        BackupJob *job = &jobs[name.toStdString()];
+
+        if (!timer.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        if (!service.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        if (!script.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                return -1;
+        script.write(job->make_shell_script().toUtf8());
+        service.write(job->get_service().toUtf8());
+        if (jobs[name.toStdString()].flags.recurring)
+                timer.write(job->get_timer().toUtf8());
+
+        script.setPermissions(QFileDevice::ExeUser | QFileDevice::ExeGroup);
+
+        return 0;
 }

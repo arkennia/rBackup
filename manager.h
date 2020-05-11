@@ -89,14 +89,28 @@ class Manager
          * \param Name of job to enable.
          * \return 0 for success, -1 for not found.
          */
-        int enable_job(const std::string &name);
+        int enable_job(const QString &name);
+
+        /*!
+         * \brief Disables the named job.
+         * \param Name of the job to disable
+         * \return 0 for success, -1 for not found.
+         */
+        int disable_job(const QString &name);
 
         /*!
          * \brief Runs the given job.
          * \param Name of the job to run.
          * \return 0 on succes, -1 on failure.
          */
-        int run_job(const std::string &name);
+        int run_job(const QString &name);
+
+        /*!
+         * \brief Creates the objects for backups.
+         * \param Name of the job to create objects for.
+         * \return 0 for success, -1 for failure.
+         */
+        int create_systemd_objects(const QString &name);
 
     private:
         /*
@@ -105,13 +119,13 @@ class Manager
         std::unordered_map<std::string, BackupJob> jobs;
 
         // Service path.
-        std::string servicePath;
+        QString servicePath;
 
         // Configuration file path.
-        std::string configPath;
+        QString configPath;
 
         // Backup file path
-        std::string backupPath;
+        QString backupPath;
 
         /*!
          * \brief Creates a Json object of a job.
@@ -138,7 +152,7 @@ class Manager
          * \brief Gets the home directory to store the json in.
          * \return The home directory.
          */
-        std::string find_home_directory() const;
+        QString find_home_directory() const;
 
         /*!
          * \brief Creates a job from json.

@@ -97,6 +97,8 @@ class MainWindow : public QMainWindow
 
         void on_runButton_clicked();
 
+        void on_disableButton_clicked();
+
     private:
         Ui::MainWindow *ui;
 

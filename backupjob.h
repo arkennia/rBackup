@@ -61,13 +61,13 @@ class BackupJob
          * \brief Gets the text that will go into the .service file.
          * \return std::string of data for the .service file.
          */
-        std::string get_service() const;
+        QString get_service() const;
 
         /*!
          * \brief Gets the text that will go into the .timer file.
          * \return std::string of data for the .timer file.
          */
-        std::string get_timer() const;
+        QString get_timer() const;
 
         /*!
          * \brief Converts the job to an easily displayed QString.
@@ -123,8 +123,6 @@ class BackupJob
          */
         QString get_command() const;
 
-        int create_systemd_objects();
-
     private:
         QString name;
         QString dest;
@@ -146,9 +144,9 @@ class BackupJob
          * \brief Creates the string for "OnCalendar" of the systemd timer.
          * \return Calendar formatted for the timer.
          */
-        std::string make_systemd_calendar() const;
+        QString make_systemd_calendar() const;
 
-        std::string make_shell_script() const;
+        QString make_shell_script() const;
 };
 
 #endif // BACKUPJOB_H

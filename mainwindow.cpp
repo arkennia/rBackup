@@ -299,9 +299,12 @@ void MainWindow::create_checkbox_array()
 
 void MainWindow::on_enableButton_clicked()
 {
-        int status = manager->enable_job(ui->jobNamesList->currentItem()->text().toStdString());
+        int status = manager->enable_job(ui->jobNamesList->currentItem()->text());
         if (status)
                 show_error_dialog("Unable to enable job.");
+        else
+                ui->jobInfo->setPlainText(
+                        manager->get_job_text(ui->jobNamesList->currentItem()->text()));
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -320,5 +323,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_runButton_clicked()
 {
-        manager->run_job(ui->jobNamesList->currentItem()->text().toStdString());
+        manager->run_job(ui->jobNamesList->currentItem()->text());
+}
+
+void MainWindow::on_disableButton_clicked()
+{
+        int status = manager->disable_job(ui->jobNamesList->currentItem()->text());
+        if (status)
+                show_error_dialog("Unable to disable job.");
+        else
+                ui->jobInfo->setPlainText(
+                        manager->get_job_text(ui->jobNamesList->currentItem()->text()));
 }
