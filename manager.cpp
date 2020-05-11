@@ -63,21 +63,9 @@ int Manager::save_jobs()
 
 int Manager::load_jobs()
 {
-        QJsonDocument doc;
-        QFile backups(backupPath);
-        if (!backups.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QJsonObject obj = load_json_document(backupPath);
+        if (obj.isEmpty())
                 return -1;
-        }
-
-        QJsonParseError err;
-        doc = QJsonDocument::fromJson(backups.readAll(), &err);
-        if (err.error != QJsonParseError::NoError) {
-                std::cerr << "Error string: " + err.errorString().toStdString() << "\n";
-                return -1;
-        } else if (doc.isNull()) {
-                return 0;
-        }
-        QJsonObject obj = doc.object();
         QJsonArray arr = obj["jobs"].toArray();
 
         BackupJob job;
@@ -296,6 +284,24 @@ JobFlags Manager::jobflags_from_json(const QJsonObject &json) const
         flags.transferCompression = json["TransferCompression"].toBool();
         flags.backupType = (BackupType)json["BackupType"].toInt();
         return flags;
+}
+
+QJsonObject Manager::load_json_document(const QString &path)
+{
+        QJsonDocument doc;
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                std::cerr << "File not found or could not be opened.\n";
+        } else {
+                QJsonParseError err;
+                doc = QJsonDocument::fromJson(file.readAll(), &err);
+                if (err.error != QJsonParseError::NoError) {
+                        std::cerr << "Error: " + err.errorString().toStdString() << "\n";
+                } else if (doc.isNull()) {
+                        std::cerr << "Configuration file not found.\n";
+                }
+        }
+        return doc.object();
 }
 
 int Manager::create_systemd_objects(const QString &name)

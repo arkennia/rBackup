@@ -174,6 +174,13 @@ class Manager
          * \return JobFlags set with correct values.
          */
         JobFlags jobflags_from_json(const QJsonObject &json) const;
+
+        /*!
+         * \brief Loads the given json document.
+         * \param Path to the json file.
+         * \return QJsonObject containing the request file, or an empty one if not found.
+         */
+        QJsonObject load_json_document(const QString &path);
 };
 
 #endif // MANAGER_H
