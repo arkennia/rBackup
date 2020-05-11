@@ -28,8 +28,8 @@ add_executable(rBackup
   manager.h
 )
 
-target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare  -march=native -O1 -pipe -fno-plt -g
-    -fwrapv -fomit-frame-pointer
+target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare  -O2 -pipe 
+        -fno-plt -g -fwrapv -fomit-frame-pointer
 )
 
 target_link_libraries(rBackup PRIVATE Qt5::Widgets Qt5::DBus)
