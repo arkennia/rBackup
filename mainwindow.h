@@ -1,4 +1,4 @@
-/*
+﻿/*
         Copyright Jonathan Manly 2020
 
         This file is part of rBackup.
@@ -20,6 +20,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "manager.h"
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMainWindow>
 #include <stdexcept>
@@ -30,6 +32,8 @@ namespace Ui
         class MainWindow;
 }
 QT_END_NAMESPACE
+
+enum Tabs { JOBS, SETTINGS };
 
 /*!
  * \brief The MainWindow class
@@ -43,6 +47,10 @@ class MainWindow : public QMainWindow
     public:
         MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
+        MainWindow(const MainWindow &) = delete;
+        MainWindow(MainWindow &&) = delete;
+        MainWindow &operator=(const MainWindow &) = delete;
+        MainWindow &operator=(MainWindow &&) = delete;
 
     private slots:
 
@@ -79,8 +87,32 @@ class MainWindow : public QMainWindow
          */
         void on_newButton_clicked();
 
+        void on_jobNamesList_itemSelectionChanged();
+
+        void on_editButton_clicked();
+
+        void on_enableButton_clicked();
+
+        void on_actionExit_triggered();
+
+        void on_runButton_clicked();
+
+        void on_disableButton_clicked();
+
     private:
         Ui::MainWindow *ui;
+
+        Manager *manager;
+
+        std::array<QCheckBox *, 7> checkboxes;
+
+        bool commandGenerated;
+        bool isUpdating;
+
+        /*!
+         * \brief Populates an array of the days checkboxes.
+         */
+        void create_checkbox_array();
 
         /*!
          * \brief Generates the rsync command.
@@ -120,5 +152,54 @@ class MainWindow : public QMainWindow
          * \return QString containing the compression command.
          */
         QString selectCompressionType() const;
+
+        /*!
+         * \brief Creates a BackupJob object based on the fields of the UI.
+         * \return BackupJob object with user data.
+         */
+        BackupJob create_job() const;
+
+        /*!
+         * \brief Creates the job flags based on data in form.
+         * \return JobFlags with correct values;
+         */
+        JobFlags create_flags() const;
+
+        /*!
+         * \brief Creates the days array based on the checkboxes.
+         * \return Days array with correct values set;
+         */
+        Days create_days() const;
+
+        /*!
+         * \brief Creates the string for the time to run the job.
+         * \return Time string.
+         */
+        QString create_time() const;
+
+        /*!
+         * \brief Take jobs from manager's jobs map and list them in the QListWidget.
+         */
+        void add_jobs_to_list();
+
+        /*!
+         * \brief Loads a job's information into the Settings form.
+         * \param BackupJob to load.
+         */
+        void edit_job(const BackupJob &job);
+
+        /*!
+         * \brief Uses the given Days array to set the checkboxes.
+         * \param Days to use for the checkboxes.
+         */
+        void set_days_from_array(const Days &days);
+
+        /*!
+         * \brief Clears the settings after a successful edit or add.
+         */
+        void clear_form();
+
+    protected:
+        void closeEvent(QCloseEvent *event);
 };
 #endif // MAINWINDOW_H

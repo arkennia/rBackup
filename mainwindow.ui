@@ -41,7 +41,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="listWidget"/>
+           <widget class="QListWidget" name="jobNamesList"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -89,7 +89,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPlainTextEdit" name="plainTextEdit">
+           <widget class="QPlainTextEdit" name="jobInfo">
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -129,6 +129,26 @@
             </item>
             <item>
              <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="disableButton">
+              <property name="text">
+               <string>Disable</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_6">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -229,65 +249,15 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Date/Time</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QDateTimeEdit" name="backupDate"/>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="recurring">
-              <property name="text">
-               <string>Recurring</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
+          <item row="7" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Options</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
+          <item row="7" column="1">
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="transferCompression">
-              <property name="text">
-               <string>Transfer Compression</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="deleteWhen">
-              <item>
-               <property name="text">
-                <string>Delete During</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Delete After</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Delete Before</string>
-               </property>
-              </item>
-             </widget>
-            </item>
             <item row="0" column="2">
              <widget class="QComboBox" name="backupCompression">
               <item>
@@ -317,10 +287,29 @@
               </item>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QLabel" name="label_7">
+            <item row="0" column="1">
+             <widget class="QComboBox" name="deleteWhen">
+              <item>
+               <property name="text">
+                <string>Delete During</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Delete After</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Delete Before</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="transferCompression">
               <property name="text">
-               <string/>
+               <string>Transfer Compression</string>
               </property>
              </widget>
             </item>
@@ -351,9 +340,16 @@
               </item>
              </widget>
             </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
-          <item row="5" column="1">
+          <item row="8" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QPushButton" name="generateButton">
@@ -377,17 +373,17 @@
             </item>
            </layout>
           </item>
-          <item row="6" column="0">
+          <item row="9" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Backup Command</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="1">
+          <item row="9" column="1">
            <widget class="QPlainTextEdit" name="command"/>
           </item>
-          <item row="7" column="1">
+          <item row="10" column="1">
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -400,7 +396,7 @@
             </property>
            </spacer>
           </item>
-          <item row="8" column="1">
+          <item row="11" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
              <spacer name="horizontalSpacer_2">
@@ -424,6 +420,83 @@
             </item>
            </layout>
           </item>
+          <item row="5" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QCheckBox" name="monday">
+              <property name="text">
+               <string>Mon</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="tuesday">
+              <property name="text">
+               <string>Tues</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="wednesday">
+              <property name="text">
+               <string>Wed</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="thursday">
+              <property name="text">
+               <string>Thurs</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="friday">
+              <property name="text">
+               <string>Fri</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="saturday">
+              <property name="text">
+               <string>Sat</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sunday">
+              <property name="text">
+               <string>Sun</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QCheckBox" name="recurring">
+              <property name="text">
+               <string>Recurring</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTimeEdit" name="timeEdit"/>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Date/Time</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -441,8 +514,20 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
