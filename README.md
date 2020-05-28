@@ -1,11 +1,28 @@
-# rBackup
-An rsync backup utility with a Qt GUI.
+## Table of Contents
+- [About](#about)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [TODO](#todo)
+- [Building from Source](#building)
 
-## Status
+## About
 
-Currently in heavy development. I will put up a release on the first workable version.
+rBackups is a QT GUI built around the rsync program. It utilizes systemd timers to set up automatic backups.
 
-### Building
+## Getting Started
+Requirements:  
+* QT libraries
+* systemd
+* rsync
+* root access
+
+## Documentation
+All of the code has doxygen compatible comments.
+
+## TODO
+TODO List
+
+## Building
 
 cd build  
 cmake ..  
