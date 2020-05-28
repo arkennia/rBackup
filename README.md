@@ -13,7 +13,9 @@ The way it works is by creating .service and .timer files with the given job nam
 
 The configurations and shell scripts are stored in /etc/rbackup. The shell scripts are run by the systemd service.
 
-Provided is the ability to set most major rsync settings through the GUI itself, however the final command used comes from the "Backup Command" box which can be edited directly by the user. It is then written to a shell script.
+Provided is the ability to set most major rsync settings through the GUI itself, however the final command used comes from the "Backup Command" box which can be edited directly by the user. It is then written to a shell script.  
+
+If you want to use compression the backup, make sure you have the correct software installed.
 
 ## Getting Started
 Requirements:  
@@ -32,7 +34,7 @@ Requirements:
     ```
 
 ## Documentation
-All of the code has doxygen compatible comments.
+All of the code has Doxygen compatible comments.
 
 ## TODO
 TODO List
