@@ -35,56 +35,6 @@ MainWindow::~MainWindow()
         delete manager;
 }
 
-void MainWindow::on_browseDest_clicked()
-{
-        QString fileName = QFileDialog::getExistingDirectory(
-                this, tr("Select Directory"), "/home",
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-        ui->destination->setText(fileName);
-}
-
-void MainWindow::on_browseSrc_clicked()
-{
-        QString fileName = QFileDialog::getExistingDirectory(
-                this, tr("Select Directory"), "/home",
-                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-
-        ui->destination->setText(fileName);
-}
-
-void MainWindow::on_generateButton_clicked()
-{
-        ui->command->setPlainText(generate());
-        commandGenerated = true;
-}
-
-void MainWindow::on_finish_clicked()
-{
-        ui->tabs->setCurrentIndex(JOBS);
-        int status = 0;
-        if (!isUpdating) {
-                status = manager->add_new_job(create_job());
-                if (!status) {
-                        ui->jobNamesList->addItem(ui->jobName->text());
-                        clear_form();
-                }
-
-        } else {
-                status = manager->update_job(create_job());
-                if (!status)
-                        clear_form();
-                ui->jobName->setEnabled(true);
-                isUpdating = false;
-        }
-        manager->save_jobs();
-}
-
-void MainWindow::on_newButton_clicked()
-{
-        ui->tabs->setCurrentIndex(SETTINGS);
-}
-
 QString MainWindow::generate() const
 {
         QString tmp = "", out = selectBackupType();
@@ -265,6 +215,70 @@ void MainWindow::clear_form()
         }
 }
 
+void MainWindow::enable_recurring_elements()
+{
+        ui->timeEdit->setEnabled(true);
+        for (const auto &day : checkboxes)
+                day->setEnabled(true);
+}
+
+void MainWindow::disable_recurring_elements()
+{
+        ui->timeEdit->setEnabled(false);
+        for (const auto &day : checkboxes)
+                day->setEnabled(false);
+}
+
+void MainWindow::on_browseDest_clicked()
+{
+        QString fileName = QFileDialog::getExistingDirectory(
+                this, tr("Select Directory"), "/home",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+        ui->destination->setText(fileName);
+}
+
+void MainWindow::on_browseSrc_clicked()
+{
+        QString fileName = QFileDialog::getExistingDirectory(
+                this, tr("Select Directory"), "/home",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+
+        ui->destination->setText(fileName);
+}
+
+void MainWindow::on_generateButton_clicked()
+{
+        ui->command->setPlainText(generate());
+        commandGenerated = true;
+}
+
+void MainWindow::on_finish_clicked()
+{
+        ui->tabs->setCurrentIndex(JOBS);
+        int status = 0;
+        if (!isUpdating) {
+                status = manager->add_new_job(create_job());
+                if (!status) {
+                        ui->jobNamesList->addItem(ui->jobName->text());
+                        clear_form();
+                }
+
+        } else {
+                status = manager->update_job(create_job());
+                if (!status)
+                        clear_form();
+                ui->jobName->setEnabled(true);
+                isUpdating = false;
+        }
+        manager->save_jobs();
+}
+
+void MainWindow::on_newButton_clicked()
+{
+        ui->tabs->setCurrentIndex(SETTINGS);
+}
+
 void MainWindow::on_jobNamesList_itemSelectionChanged()
 {
         QString jobname = ui->jobNamesList->selectedItems().first()->text();
@@ -312,11 +326,10 @@ void MainWindow::on_actionExit_triggered()
         close();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent([[maybe_unused]] QCloseEvent *event)
 {
-        QMessageBox::StandardButton save;
-        save = QMessageBox::question(this, "Exit", "Save before exiting?",
-                                     QMessageBox::Yes | QMessageBox::No);
+        QMessageBox::StandardButton save = QMessageBox::question(
+                this, "Exit", "Save before exiting?", QMessageBox::Yes | QMessageBox::No);
         if (save == QMessageBox::Yes)
                 manager->save_jobs();
 }
@@ -334,4 +347,12 @@ void MainWindow::on_disableButton_clicked()
         else
                 ui->jobInfo->setPlainText(
                         manager->get_job_text(ui->jobNamesList->currentItem()->text()));
+}
+
+void MainWindow::on_recurring_stateChanged(int state)
+{
+        if (state == Qt::Checked)
+                enable_recurring_elements();
+        else if (state == Qt::Unchecked)
+                disable_recurring_elements();
 }

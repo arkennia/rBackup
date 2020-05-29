@@ -87,17 +87,39 @@ class MainWindow : public QMainWindow
          */
         void on_newButton_clicked();
 
+        /*!
+         * \brief Handles when the job selection is changed.
+         * This changes the preview pane in the jobs tab.
+         */
         void on_jobNamesList_itemSelectionChanged();
 
+        /*!
+         * \brief Handles when the edit button is clicked. Loads all of the information
+         * into the settings tab.
+         */
         void on_editButton_clicked();
 
+        /*!
+         * \brief Enables the job in systemd.
+         */
         void on_enableButton_clicked();
 
+        /*!
+         * \brief Exits the program.
+         */
         void on_actionExit_triggered();
 
+        /*!
+         * \brief Tells systemd to run the selected job.
+         */
         void on_runButton_clicked();
 
+        /*!
+         * \brief Tells systemd to disable the job.
+         */
         void on_disableButton_clicked();
+
+        void on_recurring_stateChanged(int state);
 
     private:
         Ui::MainWindow *ui;
@@ -198,6 +220,16 @@ class MainWindow : public QMainWindow
          * \brief Clears the settings after a successful edit or add.
          */
         void clear_form();
+
+        /*!
+         * \brief Enables the elements that pertain to recurring events.
+         */
+        void enable_recurring_elements();
+
+        /*!
+         * \brief Disables the elements that pertain to recurring events.
+         */
+        void disable_recurring_elements();
 
     protected:
         void closeEvent(QCloseEvent *event);
