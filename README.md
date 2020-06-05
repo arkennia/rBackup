@@ -15,7 +15,7 @@ The configurations and shell scripts are stored in /etc/rbackup. The shell scrip
 
 Provided is the ability to set most major rsync settings through the GUI itself, however the final command used comes from the "Backup Command" box which can be edited directly by the user. It is then written to a shell script.  
 
-If you want to use compression the backup, make sure you have the correct software installed.
+If you want to use compression for the backup, make sure you have the correct software installed.
 
 ## Getting Started
 Requirements:  
