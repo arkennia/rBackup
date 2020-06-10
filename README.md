@@ -7,7 +7,7 @@
 
 ## About
 
-rBackups is a QT GUI built around the rsync program. It utilizes systemd timers to set up automatic backups. It is written in C++ and utilizes json to store conifgurations. CMake is the provided build system.  
+rBackups is a QT GUI built around the rsync program. It utilizes systemd timers to set up automatic backups. It is written in C++ and uses json to store conifgurations. CMake is the provided build system.  
   
 The way it works is by creating .service and .timer files with the given job name. These can be found in /usr/lib/systemd/system/.  
 
