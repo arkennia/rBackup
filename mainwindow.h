@@ -231,6 +231,11 @@ class MainWindow : public QMainWindow
          */
         void disable_recurring_elements();
 
+        /*!
+         * \brief Validates the settings form before submitting it to the list.
+         */
+        void validate_input();
+
     protected:
         void closeEvent(QCloseEvent *event);
 };

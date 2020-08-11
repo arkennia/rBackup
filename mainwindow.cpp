@@ -229,6 +229,10 @@ void MainWindow::disable_recurring_elements()
                 day->setEnabled(false);
 }
 
+void MainWindow::validate_input()
+{
+}
+
 void MainWindow::on_browseDest_clicked()
 {
         QString fileName = QFileDialog::getExistingDirectory(
