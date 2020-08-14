@@ -323,7 +323,8 @@ int Manager::create_systemd_objects(const QString &name)
         if (jobs[name.toStdString()].flags.recurring)
                 timer.write(job->get_timer().toUtf8());
 
-        script.setPermissions(QFileDevice::ExeUser | QFileDevice::ExeGroup);
+        script.setPermissions(QFileDevice::ExeUser | QFileDevice::ExeGroup | QFileDevice::ReadUser
+                              | QFileDevice::ReadOther);
 
         return 0;
 }
