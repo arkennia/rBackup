@@ -44,5 +44,5 @@ TODO List
 cd build  
 cmake ..  
 make  
-sudo make install
-sudo ./rBackup  
+sudo make install   
+sudo ./rBackup   
