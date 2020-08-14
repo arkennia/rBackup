@@ -248,7 +248,7 @@ void MainWindow::on_browseSrc_clicked()
                 this, tr("Select Directory"), "/home",
                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-        ui->destination->setText(fileName);
+        ui->source->setText(fileName);
 }
 
 void MainWindow::on_generateButton_clicked()
