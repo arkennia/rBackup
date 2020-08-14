@@ -125,7 +125,7 @@ QString MainWindow::selectCompressionType() const
 BackupJob MainWindow::create_job() const
 {
         QString command = "";
-        if (commandGenerated)
+        if (commandGenerated || isUpdating)
                 command = ui->command->toPlainText();
         else
                 command = generate();

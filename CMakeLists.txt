@@ -28,6 +28,11 @@ add_executable(rBackup
   manager.h
 )
 
+install(CODE "execute_process(COMMAND bash -c \"sudo useradd -M -s /bin/bash rbackup\")")
+install(CODE "execute_process(COMMAND bash -c \"sudo mkdir /etc/rbackup\")")
+install(CODE "execute_process(COMMAND bash -c \"sudo chown rbackup /etc/rbackup\")")
+install(CODE "execute_process(COMMAND bash -c \"sudo chmod 666 -R /etc/rbackup\")")
+
 target_compile_options(rBackup PRIVATE -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare  -O2 -pipe 
         -fno-plt -g -fwrapv -fomit-frame-pointer
 )

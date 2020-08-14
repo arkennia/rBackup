@@ -50,7 +50,7 @@ QString BackupJob::get_service() const
         out += "[Service]\n";
         out += "Type=oneshot\n";
         out += "ExecStart=sh /etc/rbackup/" + name + ".sh\n";
-        out += "User=" + QString::fromStdString(getenv("USER"));
+        out += "User=rbackup";
         out += "\n\n";
         out += "[Install]\n";
         out += "WantedBy=multi-user.target\n";
