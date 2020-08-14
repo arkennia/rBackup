@@ -30,7 +30,7 @@ Requirements:
 4. Select Finish
 5. You can verify the job was set up properly by running:  
     ```
-    sudo systemd status <name of job>.service
+    sudo systemctl status <name of job>.service
     ```
 
 ## Documentation
@@ -44,4 +44,5 @@ TODO List
 cd build  
 cmake ..  
 make  
-./rbackup  
+sudo make install
+sudo ./rBackup  
