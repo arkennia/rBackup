@@ -121,7 +121,12 @@ class MainWindow : public QMainWindow
 
         void on_recurring_stateChanged(int state);
 
-    private:
+        /*!
+         * \brief Deletes the specified job.
+         */ 
+        void on_deleteButton_clicked();
+
+private:
         Ui::MainWindow *ui;
 
         Manager *manager;

@@ -360,3 +360,15 @@ void MainWindow::on_recurring_stateChanged(int state)
         else if (state == Qt::Unchecked)
                 disable_recurring_elements();
 }
+
+void MainWindow::on_deleteButton_clicked()
+{
+        int status = manager->delete_job(ui->jobNamesList->currentItem()->text());
+        if(status)
+                show_error_dialog("Unable to delete job.");
+        else {
+                ui->jobNamesList->clear();
+                add_jobs_to_list();
+        }
+
+}

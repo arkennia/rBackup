@@ -328,3 +328,28 @@ int Manager::create_systemd_objects(const QString &name)
 
         return 0;
 }
+
+int Manager::delete_job(const QString &name) {
+       if(jobs.count(name.toStdString()) != 0) {
+                QFile timer(servicePath + name + ".timer");
+                QFile service(servicePath + name + ".service");
+                QFile script(configPath + name + ".sh");
+
+                bool status = timer.remove();
+                if (!status) {
+                        std::cerr << "Failed to remove timer\r\n";
+                }
+                status = service.remove();
+                if(!status) {
+                        std::cerr << "Failed to remove service\r\n";
+                }
+                status = script.remove();
+                if(!status) {
+                        std::cerr << "Failed to remove status\r\n";
+                        return -1;
+                }
+                jobs.erase(name.toStdString());
+                save_jobs();
+       } 
+        return 0;
+}

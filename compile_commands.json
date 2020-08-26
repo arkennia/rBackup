@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/fane/git/rBackup/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_DBUS_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -I/home/fane/git/rBackup/build -I/home/fane/git/rBackup -I/home/fane/git/rBackup/build/rBackup_autogen/include -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtDBus -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare -O2 -pipe -fno-plt -g -fwrapv -fomit-frame-pointer -fPIC -std=gnu++17 -o CMakeFiles/rBackup.dir/rBackup_autogen/mocs_compilation.cpp.o -c /home/fane/git/rBackup/build/rBackup_autogen/mocs_compilation.cpp",
+  "file": "/home/fane/git/rBackup/build/rBackup_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/fane/git/rBackup/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_DBUS_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -I/home/fane/git/rBackup/build -I/home/fane/git/rBackup -I/home/fane/git/rBackup/build/rBackup_autogen/include -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtDBus -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare -O2 -pipe -fno-plt -g -fwrapv -fomit-frame-pointer -fPIC -std=gnu++17 -o CMakeFiles/rBackup.dir/main.cpp.o -c /home/fane/git/rBackup/main.cpp",
+  "file": "/home/fane/git/rBackup/main.cpp"
+},
+{
+  "directory": "/home/fane/git/rBackup/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_DBUS_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -I/home/fane/git/rBackup/build -I/home/fane/git/rBackup -I/home/fane/git/rBackup/build/rBackup_autogen/include -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtDBus -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare -O2 -pipe -fno-plt -g -fwrapv -fomit-frame-pointer -fPIC -std=gnu++17 -o CMakeFiles/rBackup.dir/mainwindow.cpp.o -c /home/fane/git/rBackup/mainwindow.cpp",
+  "file": "/home/fane/git/rBackup/mainwindow.cpp"
+},
+{
+  "directory": "/home/fane/git/rBackup/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_DBUS_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -I/home/fane/git/rBackup/build -I/home/fane/git/rBackup -I/home/fane/git/rBackup/build/rBackup_autogen/include -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtDBus -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare -O2 -pipe -fno-plt -g -fwrapv -fomit-frame-pointer -fPIC -std=gnu++17 -o CMakeFiles/rBackup.dir/backupjob.cpp.o -c /home/fane/git/rBackup/backupjob.cpp",
+  "file": "/home/fane/git/rBackup/backupjob.cpp"
+},
+{
+  "directory": "/home/fane/git/rBackup/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_DBUS_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -I/home/fane/git/rBackup/build -I/home/fane/git/rBackup -I/home/fane/git/rBackup/build/rBackup_autogen/include -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtDBus -Wall -W -Wextra -pedantic -Wno-unused-parameter -Wno-old-style-cast -Wsign-compare -O2 -pipe -fno-plt -g -fwrapv -fomit-frame-pointer -fPIC -std=gnu++17 -o CMakeFiles/rBackup.dir/manager.cpp.o -c /home/fane/git/rBackup/manager.cpp",
+  "file": "/home/fane/git/rBackup/manager.cpp"
+}
+]

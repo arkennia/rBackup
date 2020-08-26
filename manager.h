@@ -112,6 +112,13 @@ class Manager
          */
         int create_systemd_objects(const QString &name);
 
+        /*
+         * \brief Delete job.
+         * \param Name of job to delete.
+         * \return 0 for success, -1 for failure.
+         */ 
+        int delete_job(const QString &name);
+
     private:
         /*
          * Uses unordered map to easily make sure there are no duplicates.
