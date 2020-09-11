@@ -48,7 +48,7 @@ QString BackupJob::get_service() const
         QString out = "[Unit]\n";
         out += "Description=Runs an rsync command " + name + "\n\n";
         out += "[Service]\n";
-        out += "Type=oneshot\n";
+        out += "Type=simple\n";
         out += "ExecStart=sh /etc/rbackup/" + name + ".sh\n";
         out += "User=rbackup";
         out += "\n\n";
