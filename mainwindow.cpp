@@ -229,8 +229,13 @@ void MainWindow::disable_recurring_elements()
                 day->setEnabled(false);
 }
 
-void MainWindow::validate_input()
+int MainWindow::validate_input()
 {
+        QString jobName = ui->jobName->text();
+        if(jobName.contains(' ') || jobName.contains('/'))
+                return -1;
+        else return 0;
+                
 }
 
 void MainWindow::on_browseDest_clicked()
@@ -259,8 +264,12 @@ void MainWindow::on_generateButton_clicked()
 
 void MainWindow::on_finish_clicked()
 {
-        ui->tabs->setCurrentIndex(JOBS);
         int status = 0;
+        if(validate_input() == -1) {
+                show_error_dialog("Invalid job name. Cannot contain spaces or special characters");
+                return;
+        }
+        ui->tabs->setCurrentIndex(JOBS);
         if (!isUpdating) {
                 status = manager->add_new_job(create_job());
                 if (!status) {

@@ -126,6 +126,9 @@ int Manager::enable_job(const QString &name)
         if (jobs.count(name.toStdString()) != 0) {
                 jobs[name.toStdString()].enabled = true;
                 status = create_systemd_objects(name);
+                if(status == -1) {
+                        std::cerr << "Failed to create systemd objects.\n";
+                }
                 QDBusInterface interface("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
                                          "org.freedesktop.systemd1.Manager",
                                          QDBusConnection::systemBus());

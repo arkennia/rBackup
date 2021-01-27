@@ -40,7 +40,7 @@ BackupJob::BackupJob()
         flags = JobFlags();
         enabled = false;
 }
-// TODO Hardcode this to a user that I ensure is created.
+
 QString BackupJob::get_service() const
 {
         if (command == "" || dest == "" || src == "")
@@ -50,7 +50,7 @@ QString BackupJob::get_service() const
         out += "[Service]\n";
         out += "Type=simple\n";
         out += "ExecStart=sh /etc/rbackup/" + name + ".sh\n";
-        out += "User=rbackup";
+        out += "User=root";
         out += "\n\n";
         out += "[Install]\n";
         out += "WantedBy=multi-user.target\n";

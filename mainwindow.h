@@ -238,8 +238,9 @@ private:
 
         /*!
          * \brief Validates the settings form before submitting it to the list.
+         * \return Returns 0 if good, -1 if there is an issue.
          */
-        void validate_input();
+        int validate_input();
 
     protected:
         void closeEvent(QCloseEvent *event);
