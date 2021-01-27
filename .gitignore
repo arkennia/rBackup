@@ -1,5 +1,6 @@
 *.user
-
+*cache*
+*~*
 
 # Prerequisites
 *.d
